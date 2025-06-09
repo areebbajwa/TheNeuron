@@ -47,14 +47,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const reportFieldElements = Array.from(document.querySelectorAll('.report-field'));
 
     // --- Firebase Cloud Function URLs ---
-    const processAudioFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/processPatientAudio";
-    const saveLayoutFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/saveReportLayout";
-    const getLayoutFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/getReportLayout";
-    const searchPatientsFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/searchPatients";
-    const createPatientFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/createPatient";
-    const getPatientFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/getPatient";
-    const savePatientVisitFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/savePatientVisit";
-    const getLastPatientVisitFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/getLastPatientVisit"; // NEW URL
+    const processAudioFunctionUrl = "https://processpatientaudio-pzytr7bzwa-uc.a.run.app";
+    const saveLayoutFunctionUrl = "https://savereportlayout-pzytr7bzwa-uc.a.run.app";
+    const getLayoutFunctionUrl = "https://getreportlayout-pzytr7bzwa-uc.a.run.app";
+    const searchPatientsFunctionUrl = "https://searchpatients-pzytr7bzwa-uc.a.run.app";
+    const createPatientFunctionUrl = "https://createpatient-pzytr7bzwa-uc.a.run.app";
+    const getPatientFunctionUrl = "https://getpatient-pzytr7bzwa-uc.a.run.app";
+    const savePatientVisitFunctionUrl = "https://savepatientvisit-pzytr7bzwa-uc.a.run.app";
+    const getLastPatientVisitFunctionUrl = "https://getlastpatientvisit-pzytr7bzwa-uc.a.run.app";
 
     // --- Initialize & Load Data ---
     // (Existing medication loading logic - can be kept or removed if not used client-side anymore)
@@ -282,37 +282,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function loadLayoutFromServer() {
-        transcriptionOutputDiv.textContent = 'Loading layout settings...';
+        if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Loading layout settings...';
         try {
             const response = await fetch(getLayoutFunctionUrl);
-            if (response.ok) {
-                const settings = await response.json();
-                applyLayoutSettings(settings); // This will merge medicationColWidths if present
-                transcriptionOutputDiv.textContent = 'Layout settings loaded.';
-            } else if (response.status === 404) {
-                transcriptionOutputDiv.textContent = 'No saved layout found. Using defaults.';
-                applyLayoutSettings({ // Apply defaults, including medication column defaults
-                    medicationColWidths: { name: '30%', instructions: '45%', duration: '25%' } 
-                });
-            } else {
-                const err = await response.json().catch(() => ({error: "Failed to load layout"}));
-                throw new Error(err.error || response.statusText);
+            if (!response.ok) {
+                // For 404 (no layout found), it's not strictly an error, just use defaults.
+                if (response.status === 404) {
+                    if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'No saved layout found. Using defaults.';
+                    console.log("No saved layout on server, using defaults."); // Replaced logger for client-side
+                    applyLayoutSettings(currentLayoutSettings); // Apply defaults or current state
+                    setupFontSizeControls(); // Still setup controls, possibly with default values
+                    initializeInteractJs(); // Initialize interact.js here too
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            // Get response as text first
+            const responseText = await response.text();
+            // Remove trailing '%' if present and trim whitespace
+            const cleanedText = responseText.replace(/%$/, '').trim(); 
+
+            if (!cleanedText) { // Handle case where cleaned text might be empty
+                 if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Received empty layout data. Using defaults.';
+                 console.warn("Received empty layout data from server."); // Replaced logger
+                 applyLayoutSettings(currentLayoutSettings);
+                 setupFontSizeControls();
+                 initializeInteractJs();
+                 return;
+            }
+
+            const data = JSON.parse(cleanedText); // Parse the cleaned text
+
+            applyLayoutSettings(data);
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Layout settings loaded.';
+            console.log("Layout loaded from server:", data); // Replaced logger
         } catch (error) {
-            console.error("Error loading layout from server:", error);
-            transcriptionOutputDiv.textContent = `Error loading layout: ${error.message}. Using defaults.`;
-            applyLayoutSettings({ // Apply defaults on error
-                 medicationColWidths: { name: '30%', instructions: '45%', duration: '25%' }
-            });
+            console.error("Error loading layout from server:", error); // Replaced logger
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Error loading layout: ${error.message}. Using defaults.`;
+            applyLayoutSettings(currentLayoutSettings); // Apply defaults or current state on error
         }
-        // Re-setup controls and interactjs after settings are applied or defaults used
-        setupFontSizeControls(); 
-        initializeInteractJs();
-        // Since updateReportPreview isn't called here, we might need to manually trigger
-        // medication column resizer initialization if report has items already
-        if (document.querySelector('.medication-item')) {
-            initializeMedicationColumnResizing();
-        }
+        // Ensure font size controls are set up regardless of load success,
+        // using either loaded settings or defaults.
+        setupFontSizeControls();
+        initializeInteractJs(); // Initialize interact.js after applying settings
     }
 
     async function saveLayoutToServer() {

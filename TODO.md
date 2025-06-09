@@ -292,7 +292,92 @@
         *   **5.14.3: Create new Cloud Function `addHistoricalVisit` (`functions/index.js`)** that accepts a `patientId` (which will be the `PReg` for imported patients) and `visitData` from the script, and saves it to `patients/{patientId}/visits/{new_visit_id}`. This function will be simpler than `savePatientVisit` as it's for bulk historical import.
         *   **5.14.4: Re-run the import script** to populate historical visits. This should be done *after* the main patient demographic import, or integrated if a single script approach is taken. The `patients` documents must exist before their `visits` subcollections can be populated.
     *   **Test 5.14.1:** Verify that after re-import, selecting an imported patient (e.g., "Rukhsana Bibi") in `index.html` now correctly auto-populates the form with their most recent historical visit data from the CSV. Test with multiple patients.
-    *   **Status:** Not Started
+    *   **Status:** In Progress
 
 **Firebase Configuration (User Provided):**
-```
+
+## Phase 6: Deployment and Environment Configuration
+
+*   **Task 6.1: Deploy to Live Firebase Environment.**
+    *   **Requirements:**
+        *   Ensure `GEMINI_API_KEY` is correctly configured for deployed functions using `defineString` and set in the Firebase environment (e.g., via `.env.theneuron-ac757` or Google Cloud Console).
+        *   Deploy all Firebase assets: `firebase deploy` (Functions, Firestore rules/indexes, Hosting).
+        *   Verify successful deployment of all functions.
+    *   **Test 6.1.1:** All Cloud Functions deploy without errors.
+    *   **Status:** Complete
+
+*   **Task 6.2: Update Client-Side Firebase Function URLs.**
+    *   **Requirements:**
+        *   Once functions are successfully deployed, get their live URLs (e.g., from Firebase console or `firebase functions:list` output).
+        *   Update `script.js` and `patient_management.js` to replace `localhost:5001` URLs with the live production URLs for all Firebase Cloud Functions.
+    *   **Test 6.2.1:** Open the deployed application. Verify all features relying on Cloud Functions (audio processing, patient search/CRUD, layout saving/loading, visit handling) work correctly with the live backend.
+    *   **Status:** Complete
+
+*   **Task 6.3: Upgrade Cloud Functions Node.js Runtime.**
+    *   **Requirements:**
+        *   Update `functions/package.json` to specify a supported Node.js runtime (e.g., Node.js 20 or later, as per Firebase/Google Cloud recommendations). The current Node.js 18 is deprecated.
+        *   Modify the `engines` field in `functions/package.json`.
+        *   Re-deploy functions after updating.
+    *   **Test 6.3.1:** Functions deploy successfully with the new Node.js runtime and continue to operate as expected.
+    *   **Status:** Complete
+
+*   **NEW Task 6.4: End-to-End Test of Core Report Generation Workflow.**
+    *   **Requirements:** Test the primary user flow of populating data and generating a report on the live application.
+    *   **Test 6.4.1:** Perform E2E test.
+        1.  Navigate to the live application URL (`https://theneuron-ac757.web.app`).
+        2.  Verify that the message "Layout settings loaded." is displayed.
+        3.  Click the "Populate Sample Data" button.
+        4.  Verify that the relevant input fields (e.g., Patient Name, Complaints, Medications) are populated with sample data.
+        5.  Click the "Generate Report" button.
+        6.  Verify that the report preview area is updated and displays content derived from the sample data.
+        7.  Check the browser console for any new critical errors during this flow.
+    *   **Status:** Complete
+
+*   **NEW Task 6.5: End-to-End Test of Audio Recording and Processing Workflow.**
+    *   **Requirements:** Test the audio input to structured data population flow on the live application.
+    *   **Test 6.5.1:** Perform E2E test.
+        1.  Navigate to the live application URL (`https://theneuron-ac757.web.app`).
+        2.  Wait for layout settings to load.
+        3.  Click the "Start Recording" button.
+        4.  Verify the "Start Recording" button is disabled and hidden, and the "Stop Recording" button is enabled and visible. Verify a "Recording..." message is displayed.
+        5.  Click the "Stop Recording" button.
+        6.  Verify the "Stop Recording" button is disabled and hidden, and the "Start Recording" button is enabled and visible. Verify a "Processing audio..." or similar message appears.
+        7.  Verify that input fields are eventually populated or cleared based on the (likely minimal) AI response to the simulated empty audio.
+        8.  Check the browser console for any new critical errors during this flow.
+    *   **Status:** Complete
+
+*   **NEW Task 6.6: Address Firebase Build Image Cleanup Warning.**
+    *   **Requirements:** Investigate and resolve the "Unhandled error cleaning up build images" warning to prevent potential small monthly bills.
+    *   **Actions:**
+        1.  Navigate to `https://console.cloud.google.com/gcr/images/theneuron-ac757/us/gcf`.
+        2.  Attempt to identify and manually delete orphaned/unnecessary build images if clearly identifiable.
+        3.  If manual deletion is unclear or risky, consider if another `firebase deploy` might resolve it, as suggested by the warning (though previous deploys did not clear it).
+        4.  Document findings and actions.
+    *   **Status:** On Hold (User requested to defer)
+
+*   **NEW Task 6.7: End-to-End Test of Patient Search, Selection, and Last Visit Autofill.**
+    *   **Requirements:** Test the workflow of searching for an existing patient, selecting them, and verifying that their demographic data and last visit details (if any) are auto-populated on the report page. This uses the live application.
+    *   **Assumptions for Test Data:** This test will assume that a patient named "Rukhsana Bibi" exists (imported from CSV, `PReg`: `PR-1`) and has at least one historical visit record that can be fetched by the `getLastPatientVisit` function.
+    *   **Test 6.7.1:** Perform E2E test.
+        1.  Navigate to the live application URL (`https://theneuron-ac757.web.app`).
+        2.  Wait for layout settings to load.
+        3.  In the "Patient Name" input field, type "Rukhsana Bibi".
+        4.  Verify that autocomplete suggestions appear and include "Rukhsana Bibi".
+        5.  Click on the "Rukhsana Bibi" suggestion to select the patient.
+        6.  Verify that patient demographic fields (e.g., Age, Gender, PReg/Code) are populated with Rukhsana Bibi's data.
+        7.  Verify that visit-specific fields (Complaints, Examination, Diagnosis, Medications) are populated with data from her most recent visit. (If no last visit is found by the system, these should be empty, and a message like "No previous visits found" should appear).
+        8.  Check the browser console for any new critical errors during this flow.
+    *   **Status:** Blocked (Pending historical data import - Task 5.14)
+
+*   **NEW Task 5.14: Import Historical Visit Data from CSV.**
+    *   **Requirements:**
+        *   **5.14.1: Analyze `ClinicData.xlsx - Sheet1.csv`** to identify columns relevant to individual patient visits (e.g., visit date, complaints for that visit, diagnosis for that visit, medications prescribed, etc.) and how to link them to a `PReg`. Determine if each row is a unique visit or if data needs aggregation.
+        *   **5.14.2: Modify `import_patients_from_csv.py`** (or create a new script if complexity warrants it) to:
+            *   Read and parse visit-specific data from the CSV.
+            *   For each patient, and for each of their historical visits found in the CSV, construct a visit data object.
+            *   Ensure `visitDate` is a valid Firestore Timestamp (or a string that can be consistently converted and sorted).
+            *   Instead of calling `createPatient` for this (which is for demographics), it will need to write directly to the `patients/{patientId}/visits` subcollection in Firestore. It could potentially call a *new* slimmed-down Cloud Function designed just for adding these historical visits, or use the Firebase Admin SDK directly if the script is run in a trusted environment with service account credentials (though for emulator consistency, calling a function might be better). For simplicity, let's assume it will call a new Cloud Function: `addHistoricalVisit(patientId, visitData)`.
+        *   **5.14.3: Create new Cloud Function `addHistoricalVisit` (`functions/index.js`)** that accepts a `patientId` (which will be the `PReg` for imported patients) and `visitData` from the script, and saves it to `patients/{patientId}/visits/{new_visit_id}`. This function will be simpler than `savePatientVisit` as it's for bulk historical import.
+        *   **5.14.4: Re-run the import script** to populate historical visits. This should be done *after* the main patient demographic import, or integrated if a single script approach is taken. The `patients` documents must exist before their `visits` subcollections can be populated.
+    *   **Test 5.14.1:** Verify that after re-import, selecting an imported patient (e.g., "Rukhsana Bibi") in `index.html` now correctly auto-populates the form with their most recent historical visit data from the CSV. Test with multiple patients.
+    *   **Status:** In Progress

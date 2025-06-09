@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const occupationForm = document.getElementById('occupationForm');
     const addressForm = document.getElementById('addressForm');
 
-    // --- Firebase Cloud Function URLs (Same as in script.js, ensure emulators are running) ---
-    const searchPatientsFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/searchPatients";
-    const createPatientFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/createPatient";
-    const updatePatientFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/updatePatient"; // Assuming this will be used
-    const deletePatientFunctionUrl = "http://localhost:5001/theneuron-ac757/us-central1/deletePatient"; // Assuming this will be used
+    // --- Firebase Cloud Function URLs ---
+    const searchPatientsFunctionUrl = "https://searchpatients-pzytr7bzwa-uc.a.run.app";
+    const createPatientFunctionUrl = "https://createpatient-pzytr7bzwa-uc.a.run.app";
+    const updatePatientFunctionUrl = "https://updatepatient-pzytr7bzwa-uc.a.run.app"; 
+    const deletePatientFunctionUrl = "https://deletepatient-pzytr7bzwa-uc.a.run.app"; 
 
     let currentEditPatientId = null; // To store ID of patient being edited
 

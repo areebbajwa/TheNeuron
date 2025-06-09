@@ -5,12 +5,11 @@ import time # For potential rate limiting
 from collections import defaultdict # New import
 
 CSV_FILE_PATH = "/Users/areebbajwa/Downloads/ClinicData.xlsx - Sheet1.csv"
-# Ensure your Firebase emulators are running and accessible at this address
-# CREATE_PATIENT_HOST = "localhost:5001" - Replaced by EMULATOR_HOST
-# CREATE_PATIENT_PATH = "/theneuron-ac757/us-central1/createPatient" - Replaced by CREATE_PATIENT_FUNCTION_PATH
-EMULATOR_HOST = "localhost:5001" # Centralized host
-CREATE_PATIENT_FUNCTION_PATH = "/theneuron-ac757/us-central1/createPatient"
-ADD_HISTORICAL_VISIT_FUNCTION_PATH = "/theneuron-ac757/us-central1/addHistoricalVisit" # New path for the new CF
+
+# --- Target Live Firebase Functions ---
+LIVE_FUNCTIONS_HOST = "us-central1-theneuron-ac757.cloudfunctions.net"
+CREATE_PATIENT_FUNCTION_PATH = "/createPatient"  # Path only, host contains project/region
+ADD_HISTORICAL_VISIT_FUNCTION_PATH = "/addHistoricalVisit" # Path only
 
 def import_patients():
     processed_pregs = set()
@@ -19,7 +18,8 @@ def import_patients():
     failed_imports = []
 
     print(f"Starting patient import from: {CSV_FILE_PATH}")
-    print(f"Targeting Patient Creation Cloud Function at: http://{EMULATOR_HOST}{CREATE_PATIENT_FUNCTION_PATH}")
+    # print(f"Targeting Patient Creation Cloud Function at: http://{EMULATOR_HOST}{CREATE_PATIENT_FUNCTION_PATH}")
+    print(f"Targeting Patient Creation Cloud Function at: https://{LIVE_FUNCTIONS_HOST}{CREATE_PATIENT_FUNCTION_PATH}")
 
     try:
         with open(CSV_FILE_PATH, mode='r', encoding='utf-8-sig') as csvfile: # utf-8-sig to handle potential BOM
@@ -83,7 +83,8 @@ def import_patients():
 
                 try:
                     if conn is None: 
-                         conn = http.client.HTTPConnection(EMULATOR_HOST, timeout=10)
+                         # conn = http.client.HTTPConnection(EMULATOR_HOST, timeout=10)
+                         conn = http.client.HTTPSConnection(LIVE_FUNCTIONS_HOST, timeout=20) # Use HTTPS for live
                     
                     conn.request("POST", CREATE_PATIENT_FUNCTION_PATH, json_payload, headers)
                     response = conn.getresponse()
@@ -107,10 +108,10 @@ def import_patients():
                     conn = None 
                     time.sleep(1) 
                 except ConnectionRefusedError as e:
-                     print(f"FATAL (Demographics): Connection Refused. Ensure Firebase emulators (Functions) are running at http://{EMULATOR_HOST}. Error: {e}")
+                     print(f"FATAL (Demographics): Connection Refused or Unreachable. Check live Function URL and internet: https://{LIVE_FUNCTIONS_HOST}{CREATE_PATIENT_FUNCTION_PATH}. Error: {e}")
                      print("Aborting demographic import.")
                      if conn: conn.close()
-                     return # Stop if emulators aren't running
+                     return # Stop if functions aren't reachable
                 except Exception as e:
                     print(f"GENERAL ERROR (Demographics) for PReg {preg} (Row {row_index + 2}): {e}")
                     failed_imports.append({"pReg": preg, "type": "demographic", "name": patient_name, "error": str(e)})
@@ -142,7 +143,8 @@ def import_patients():
 
 def import_historical_visits():
     print("\\n--- Starting Historical Visit Import ---")
-    print(f"Targeting Add Historical Visit Cloud Function at: http://{EMULATOR_HOST}{ADD_HISTORICAL_VISIT_FUNCTION_PATH}")
+    # print(f"Targeting Add Historical Visit Cloud Function at: http://{EMULATOR_HOST}{ADD_HISTORICAL_VISIT_FUNCTION_PATH}")
+    print(f"Targeting Add Historical Visit Cloud Function at: https://{LIVE_FUNCTIONS_HOST}{ADD_HISTORICAL_VISIT_FUNCTION_PATH}")
     
     visits_to_process = defaultdict(lambda: {"details": None, "medications": []})
     all_csv_rows = [] # To store all rows from CSV for visit processing
@@ -225,7 +227,8 @@ def import_historical_visits():
 
         try:
             if conn is None:
-                conn = http.client.HTTPConnection(EMULATOR_HOST, timeout=10)
+                # conn = http.client.HTTPConnection(EMULATOR_HOST, timeout=10)
+                conn = http.client.HTTPSConnection(LIVE_FUNCTIONS_HOST, timeout=20) # Use HTTPS for live
             
             conn.request("POST", ADD_HISTORICAL_VISIT_FUNCTION_PATH, json_payload_for_cf, headers)
             response = conn.getresponse()
@@ -248,10 +251,10 @@ def import_historical_visits():
             conn = None
             time.sleep(1)
         except ConnectionRefusedError: # No 'as e' needed if not using e
-            print(f"FATAL (Visit): Connection Refused. Ensure Firebase emulators (Functions) are running at http://{EMULATOR_HOST}.")
-            print("Aborting visit import.")
+            # print(f"FATAL (Visit Import): Connection Refused. Ensure Firebase emulators (Functions) are running at http://{EMULATOR_HOST}. Aborting visit import.")
+            print(f"FATAL (Visit Import): Connection Refused or Unreachable. Check live Function URL and internet: https://{LIVE_FUNCTIONS_HOST}{ADD_HISTORICAL_VISIT_FUNCTION_PATH}. Aborting visit import.")
             if conn: conn.close()
-            return 
+            return # Stop if functions aren't reachable
         except Exception as e:
             print(f"GENERAL ERROR (Visit) for PReg {preg}, Date {visit_date_str}: {e}")
             failed_visits_details.append({"pReg": preg, "visitDate": visit_date_str, "error_type": "GeneralException", "error": str(e)})

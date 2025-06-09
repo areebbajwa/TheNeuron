@@ -16,25 +16,34 @@ const logger = require("firebase-functions/logger");
 const corsNode = require("cors");
 const fs = require("fs");
 const path = require("path");
+const { defineString } = require('firebase-functions/params'); // Added import
 
 const corsMiddleware = corsNode({ origin: true });
 
 admin.initializeApp();
 const db = admin.firestore(); // Initialize Firestore
 
-// Access your Gemini API key from Firebase environment configuration
-// User needs to set this: firebase functions:config:set gemini.key="YOUR_GEMINI_API_KEY_HERE"
-const GEMINI_API_KEY = functions.config().gemini?.key; // Added optional chaining for safety
+// Define the Gemini API Key parameter globally
+const geminiApiKey = defineString("GEMINI_API_KEY");
 
+// Declare genAI and model globally for caching, initially undefined
 let genAI;
 let model;
 
-if (GEMINI_API_KEY) {
-    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-2.5-pro-preview-06-05" }); 
-    logger.info("Gemini AI Model initialized successfully.");
-} else {
-    logger.error("Gemini API key is not configured. Function will fail API calls.");
+// Helper function to initialize and get the Gemini model
+function getGeminiModel() {
+    if (!model) { // Only initialize if not already done
+        const key = geminiApiKey.value(); // Access .value() at runtime
+        if (key) {
+            genAI = new GoogleGenerativeAI(key);
+            model = genAI.getGenerativeModel({ model: "gemini-2.5-pro-preview-06-05" });
+            logger.info("Gemini AI Model initialized successfully via getGeminiModel().");
+        } else {
+            logger.error("Gemini API key is not configured. Ensure GEMINI_API_KEY is set. Cannot initialize model.");
+            // model remains undefined or null
+        }
+    }
+    return model;
 }
 
 // Load medication context data (names, instructions, durations)
@@ -71,8 +80,9 @@ exports.processPatientAudio = onRequest(
                 return res.status(405).send({ error: "Method Not Allowed" });
             }
 
-            if (!model) {
-                logger.error("Gemini model not initialized. API key likely missing.");
+            const localModel = getGeminiModel(); // Call the helper to get the model
+            if (!localModel) { // Check if the model was successfully initialized
+                logger.error("Gemini model not available for processPatientAudio. API key likely missing or failed initialization.");
                 return res.status(500).send({ error: "Internal Server Error: AI model not configured." });
             }
 
@@ -232,7 +242,7 @@ Example JSON output structure:
                 ];
 
                 logger.info("Sending request to Gemini API...", {model: "gemini-2.5-pro-preview-06-05"});
-                const result = await model.generateContent({
+                const result = await localModel.generateContent({
                     contents: [{ role: "user", parts: [audioPart, {text: prompt}] }],
                     generationConfig,
                     safetySettings
