@@ -1,0 +1,534 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex;
+    flex-direction: column; /* Changed from row to column for input above output */
+    align-items: center; /* Center content */
+    font-size: 16px; /* Increased base font size */
+}
+
+.input-section {
+    width: 100%;
+    max-width: 800px; /* Increased max width */
+    margin-bottom: 25px; /* Increased margin */
+    padding: 20px; /* Increased padding */
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Slightly more rounded */
+}
+
+.input-section div {
+    margin-bottom: 15px; /* Increased spacing */
+}
+
+.input-section label {
+    display: inline-block;
+    width: 140px; /* Increased width for longer labels */
+    margin-right: 10px;
+    font-size: 1.1em; /* Larger label font */
+}
+
+.input-section input[type="text"],
+.input-section textarea {
+    width: calc(100% - 160px); /* Adjust width considering larger label and padding */
+    padding: 10px; /* Increased padding */
+    border: 1px solid #ddd;
+    border-radius: 4px; /* Slightly more rounded */
+    box-sizing: border-box;
+    font-size: 1em; /* Ensure input font size is reasonable */
+}
+
+.input-section textarea {
+    resize: vertical;
+    min-height: 80px; /* Larger default height */
+}
+
+.input-section button {
+    padding: 12px 20px; /* Increased padding */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 1.1em; /* Larger button font */
+}
+
+.input-section button:hover {
+    background-color: #0056b3;
+}
+
+/* Status message area */
+#transcriptionOutput {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 25px;
+    padding: 15px; /* Increased padding */
+    border: 1px solid #eee;
+    min-height: 50px; /* Increased min-height */
+    font-size: 1.1em; /* Larger font */
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+/* Layout Customization Section */
+#layoutCustomizationSection {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 25px; /* Increased margin */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#layoutCustomizationSection summary {
+    font-size: 1.2em; /* Larger summary font */
+    font-weight: bold;
+    padding: 15px; /* Increased padding */
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border-radius: 8px 8px 0 0; /* Match top corners if details is open */
+}
+
+#layoutCustomizationSection[open] summary {
+    border-bottom: 1px solid #ccc;
+}
+
+#layout-controls-container {
+    padding: 20px; /* Increased padding */
+}
+
+#layout-controls-container h3 {
+    margin-top: 0;
+    font-size: 1.15em; /* Larger heading */
+}
+
+#font-size-controls-container label {
+    font-size: 1em; /* Standardize font size */
+    width: auto; /* Allow natural width */
+    margin-right: 5px;
+}
+#font-size-controls-container input[type="number"] {
+    padding: 8px;
+    width: 60px; /* Sufficient for numbers */
+    font-size: 1em;
+    margin-right: 15px; /* Spacing after input */
+}
+#font-size-controls-container br {
+    margin-bottom: 10px; /* Space between font control lines */
+}
+
+#layout-controls-container button {
+    padding: 10px 18px; /* Adjusted padding */
+    background-color: #28a745; /* Green for save */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 10px; /* Space between buttons */
+    font-size: 1em;
+}
+#layout-controls-container button:hover {
+    opacity: 0.9;
+}
+#layout-controls-container button#resetLayoutButton {
+    background-color: #dc3545; /* Red for reset */
+}
+
+/* Report Preview - A4-like proportions for on-screen preview */
+/* Actual print scaling will be handled by printer settings and matching content to physical letterhead */
+.report-preview {
+    width: 210mm; /* Standard A4 width */
+    height: 297mm; /* Standard A4 height */
+    border: 1px solid #666; /* Light border for preview */
+    position: relative; /* Crucial for absolute positioning of children */
+    margin: 0 auto; /* Center the preview */
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow: hidden; /* Ensure content stays within borders */
+}
+
+.report-field {
+    position: absolute;
+    font-size: 10pt; /* Approximate size, adjust as needed */
+    /* Placeholder positions - these will need careful adjustment based on the letterhead image */
+}
+
+/* Specific positions based on visual estimation from the image */
+/* These are VERY approximate and will need significant refinement */
+/* Using mm for easier mapping to physical dimensions */
+
+#reportDateDisplay {
+    top: 43mm; /* Approx position of Date */
+    left: 25mm;
+    width: 100mm;
+}
+
+#reportCodeDisplay {
+    top: 50mm; /* Approx position of Code */
+    left: 25mm;
+    width: 100mm;
+}
+
+#reportPatientNameDisplay {
+    top: 43mm;   /* Approx position of Name */
+    left: 95mm;  /* To the right of Date/Code */
+    width: 100mm;
+}
+
+#reportAgeDisplay {
+    top: 43mm;  /* Approx position of Age */
+    left: 175mm; /* To the right of Name */
+    width: 40mm;
+}
+
+#reportGenderDisplay {
+    top: 46mm; /* Approx position of Gender, slightly below Age */
+    left: 175mm;
+    width: 40mm;
+}
+
+#reportComplaintsDisplay {
+    top: 75mm;  /* Approx position of Complaints */
+    left: 15mm;
+    width: 75mm; /* Approx width of complaints box */
+    height: 50mm; /* Approx height */
+    white-space: pre-wrap; /* Preserve line breaks from textarea */
+    overflow-y: auto; /* In case content is too long */
+}
+
+#reportExaminationDisplay {
+    top: 130mm; /* Approx position for Examination - user said can be blank, but added a spot */
+    left: 15mm;
+    width: 75mm;
+    height: 30mm;
+    white-space: pre-wrap;
+}
+
+#reportDiagnosisDisplay {
+    top: 165mm; /* Approx position of Diagnosis */
+    left: 15mm;
+    width: 75mm;
+    height: 30mm;
+    white-space: pre-wrap;
+}
+
+#reportMedicationsList {
+    top: 70mm;   /* Approx start of medications column */
+    left: 95mm;  /* To the right, aligned with Patient Name */
+    width: 110mm; /* Approx width of medications column */
+    height: 150mm; /* Approx height */
+    display: flex; /* Allow medication items to flow if needed, or manage spacing */
+    flex-direction: column;
+}
+
+.medication-item {
+    /* position: relative; /* For positioning sub-items if needed, or just for flow */
+    margin-bottom: 2mm; /* Spacing between medication lines */
+    display: flex; /* Using flex for layout of name, instruction, duration */
+    width: 100%; /* Ensure it takes up the full width of its parent #reportMedicationsList */
+    font-size: 9pt;
+}
+
+/* DEPRECATED STYLES - these were for when medication item was a single line with spans */
+/* .medication-name {
+    flex-basis: 35%; /* Adjust as needed */
+/*    padding-right: 5px;
+}
+
+.medication-instructions {
+    flex-basis: 45%; /* Adjust as needed */
+/*    padding-right: 5px;
+    /* For Urdu, text will flow RTL naturally if the characters are Urdu */
+    /* text-align: right; Might be needed if mixed with LTR text and alignment is off */
+/* }
+
+.medication-duration {
+    flex-basis: 20%; /* Adjust as needed */
+/*    text-align: right; /* Often durations are right-aligned */
+/* } */
+
+/* NEW Styles for medication columns */
+.medication-name-col,
+.medication-instr-col,
+.medication-dur-col {
+    padding: 0 2px; /* Small padding within columns */
+    border: 1px dotted transparent; /* For visualizing, can be removed */
+    box-sizing: border-box;
+    overflow-wrap: break-word; /* Allow long words to break and wrap */
+    /* white-space: pre-wrap; /* If we want to preserve spaces/line breaks within a cell */
+}
+
+.medication-name-col {
+    flex-basis: 30%; /* Default width */
+}
+
+.medication-instr-col {
+    flex-basis: 45%; /* Default width */
+}
+
+.medication-dur-col {
+    flex-basis: 25%; /* Default width */
+    text-align: right; /* Durations are often right-aligned */
+}
+
+/* Styles for Patient Name Autocomplete */
+.autocomplete-container {
+    position: relative; /* Needed for absolute positioning of suggestions */
+    margin-bottom: 15px;
+}
+
+.suggestions-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 99;
+    top: 100%; /* Position below the input field */
+    left: 0;
+    right: 0;
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestions-dropdown ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestions-dropdown ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.suggestions-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.suggestions-dropdown ul li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Hide parts of the UI that are not for printing */
+@media print {
+    body {
+        margin: 0;
+        display: block; /* Reset flex for printing */
+    }
+    .input-section {
+        display: none;
+    }
+    hr {
+        display: none;
+    }
+    .report-preview {
+        width: auto; /* Let printer handle scaling */
+        height: auto;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        overflow: visible;
+    }
+    /* Ensure absolute positioning is relative to the page, not a shrunk container */
+    /* This might need testing; often, direct body children are better for printing full page */
+    body > *:not(.report-preview) {
+        display: none;
+    }
+}
+
+/* NEW Styles for action buttons bar */
+.action-buttons-bar {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line on smaller screens */
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px; /* Space above the button bar */
+    margin-bottom: 15px; /* Space below the button bar */
+}
+
+.action-buttons-bar button {
+    margin-top: 0; /* Override default margin-top from .input-section button */
+}
+
+/* --- Styles for Patient Management Page (patient_management.html) --- */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.nav-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.nav-link:hover {
+    background-color: #0056b3;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.toolbar input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.toolbar button {
+    padding: 10px 15px;
+    background-color: #28a745; /* Green for add */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+.toolbar button:hover {
+    background-color: #218838;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.form-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.form-container div {
+    margin-bottom: 15px;
+}
+
+.form-container label {
+    display: block; /* Labels on their own line */
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container input[type="text"],
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.form-container textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+}
+.form-actions button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.form-actions button[type="button"] {
+    background-color: #6c757d; /* Grey for cancel */
+    color: white;
+}
+.form-actions button[type="button"]:hover {
+    background-color: #5a6268;
+}
+
+#patientTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#patientTable th, #patientTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.95em;
+}
+
+#patientTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#patientTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#patientTable tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+#patientTable .edit-btn, #patientTable .delete-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 5px;
+}
+
+#patientTable .edit-btn {
+    background-color: #ffc107; /* Yellow for edit */
+    color: #333;
+}
+#patientTable .edit-btn:hover {
+    background-color: #e0a800;
+}
+
+#patientTable .delete-btn {
+    background-color: #dc3545; /* Red for delete */
+    color: white;
+}
+#patientTable .delete-btn:hover {
+    background-color: #c82333;
+}
+
+#loadingMessage, #noPatientsMessage {
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
+    color: #555;
+} 

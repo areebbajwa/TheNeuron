@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Patient Management</h1>
+        <a href="index.html" class="nav-link">Go to Report Page</a>
+
+        <div class="toolbar">
+            <input type="text" id="searchInput" placeholder="Search patients by name, PReg, NIC...">
+            <button id="addPatientBtn">Add New Patient</button>
+        </div>
+
+        <div id="patientFormContainer" class="form-container" style="display:none;">
+            <h2 id="formTitle">Add New Patient</h2>
+            <form id="patientForm">
+                <input type="hidden" id="patientId" name="patientId">
+                <div>
+                    <label for="pRegForm">Patient Reg (PReg):</label>
+                    <input type="text" id="pRegForm" name="pRegForm" placeholder="Auto-generated for new"> 
+                </div>
+                <div>
+                    <label for="nameForm">Name:</label>
+                    <input type="text" id="nameForm" name="nameForm" required>
+                </div>
+                <div>
+                    <label for="ageForm">Age:</label>
+                    <input type="text" id="ageForm" name="ageForm" placeholder="e.g., 35">
+                </div>
+                <div>
+                    <label for="ageUnitForm">Age Unit:</label>
+                    <input type="text" id="ageUnitForm" name="ageUnitForm" placeholder="e.g., Year(s)">
+                </div>
+                <div>
+                    <label for="genderForm">Gender:</label>
+                    <select id="genderForm" name="genderForm">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="contactNoForm">Contact No.:</label>
+                    <input type="text" id="contactNoForm" name="contactNoForm">
+                </div>
+                <div>
+                    <label for="nicNoForm">NIC No.:</label>
+                    <input type="text" id="nicNoForm" name="nicNoForm">
+                </div>
+                <div>
+                    <label for="occupationForm">Occupation (FName):</label>
+                    <input type="text" id="occupationForm" name="occupationForm">
+                </div>
+                <div>
+                    <label for="addressForm">Address:</label>
+                    <textarea id="addressForm" name="addressForm" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="savePatientBtn">Save Patient</button>
+                    <button type="button" id="cancelPatientBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="patientListContainer">
+            <h2>Patient List</h2>
+            <table id="patientTable">
+                <thead>
+                    <tr>
+                        <th>PReg</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Contact</th>
+                        <th>NIC</th>
+                        <th>Occupation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patientTableBody">
+                    <!-- Patient rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <p id="loadingMessage" style="display:none;">Loading patients...</p>
+            <p id="noPatientsMessage" style="display:none;">No patients found.</p>
+        </div>
+
+    </div>
+    <script src="patient_management.js"></script>
+</body>
+</html> 

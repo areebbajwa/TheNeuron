@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Report Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+</head>
+<body>
+    <div class="input-section">
+        <h2>Patient & Report Details</h2>
+        <div class="autocomplete-container">
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="patientName" name="patientName" autocomplete="off">
+            <div id="patientNameSuggestions" class="suggestions-dropdown"></div>
+        </div>
+        <div>
+            <label for="age">Age:</label>
+            <input type="text" id="age" name="age">
+        </div>
+        <div>
+            <label for="gender">Gender:</label>
+            <input type="text" id="gender" name="gender">
+        </div>
+        <div>
+            <label for="contactNo">Contact No.:</label>
+            <input type="text" id="contactNo" name="contactNo">
+        </div>
+        <div>
+            <label for="nicNo">NIC No.:</label>
+            <input type="text" id="nicNo" name="nicNo">
+        </div>
+        <div>
+            <label for="fatherName">Occupation:</label>
+            <input type="text" id="fatherName" name="fatherName">
+        </div>
+        <div>
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" rows="2" cols="50"></textarea>
+        </div>
+        <div>
+            <label for="reportDate">Report Date:</label>
+            <input type="text" id="reportDate" name="reportDate" placeholder="Auto-generated or Manual">
+        </div>
+        <div>
+            <label for="reportCode">Patient Reg / Code:</label>
+            <input type="text" id="reportCode" name="reportCode">
+        </div>
+
+        <h2>Complaints</h2>
+        <textarea id="complaints" name="complaints" rows="4" cols="50"></textarea>
+
+        <h2>Diagnosis</h2>
+        <textarea id="diagnosis" name="diagnosis" rows="4" cols="50"></textarea>
+
+        <h2>Examination</h2>
+        <textarea id="examination" name="examination" rows="4" cols="50"></textarea>
+
+        <h2>Medications</h2>
+        <p>Enter medication names one per line (e.g., Tab Panadol). Instructions and duration will be looked up if known.</p>
+        <p>Previously: Name;Instructions;Duration</p>
+        <textarea id="medicationsInput" name="medicationsInput" rows="6" cols="50"></textarea>
+
+        <div class="action-buttons-bar">
+            <button id="populateSampleDataButton">Populate Sample Data</button>
+            <button id="generateReportButton">Generate Report</button>
+            <button id="printReportButton">Print Report</button>
+            <button id="startRecordingButton">Start Recording</button>
+            <button id="stopRecordingButton" style="display: none;">Stop Recording</button>
+            <button id="reprocessAudioButton" style="display: none; margin-left: 10px;">Reprocess Last Audio</button>
+        </div>
+
+        <div id="transcriptionOutput" style="margin-bottom: 15px; padding: 10px; border: 1px solid #eee; min-height: 40px;">
+            Status messages will appear here.
+        </div>
+    </div>
+
+    <hr>
+
+    <details id="layoutCustomizationSection">
+        <summary>Customize Report Layout</summary>
+        <div id="layout-controls-container">
+            <h3>Layout Controls</h3>
+            <div id="font-size-controls-container">
+                <!-- Font size inputs will be dynamically added here by script.js -->
+            </div>
+            <button id="saveLayoutButton">Save Layout</button>
+            <hr>
+            <h3>Generated CSS for Defaults</h3>
+            <p>After arranging the layout to your satisfaction using the controls above, click the button below. Copy the generated CSS and update your <code>style.css</code> file to make the current layout the new default.</p>
+            <button id="generateCssButton">Generate CSS for Current Layout</button>
+            <textarea id="generatedCssOutput" rows="10" style="width: 95%; margin-top: 10px; font-family: monospace;" readonly placeholder="CSS will appear here..."></textarea>
+        </div>
+    </details>
+
+    <hr>
+
+    <h2>Report Preview</h2>
+    <div id="reportOutput" class="report-preview">
+        <!-- Report will be rendered here -->
+        <div id="reportDateDisplay" class="report-field"></div>
+        <div id="reportCodeDisplay" class="report-field"></div>
+        <div id="reportPatientNameDisplay" class="report-field"></div>
+        <div id="reportAgeDisplay" class="report-field"></div>
+        <div id="reportGenderDisplay" class="report-field"></div>
+        <div id="reportComplaintsDisplay" class="report-field"></div>
+        <div id="reportExaminationDisplay" class="report-field"></div>
+        <div id="reportDiagnosisDisplay" class="report-field"></div>
+        <div id="reportMedicationsList" class="report-field medications-container">
+            <!-- Medications will be listed here -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

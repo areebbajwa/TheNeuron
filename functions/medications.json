@@ -1,0 +1,3187 @@
+[
+    {
+        "name": "Boun-T gel",
+        "instructions": "مقامی طور پر لگایئں",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "CAP P-Gab 50mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Cap  Olanzo-F 3/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap  Olanzo-F 6/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap  Thiolax",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "NULL"
+    },
+    {
+        "name": "Cap Amprexa F 6/25",
+        "instructions": "ایک کیپسو ل صبح ناشتے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Amprexa F 6/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Bio-Z",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Bipol D 3/25",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Bipol D 6/25",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Celtex 200 mg",
+        "instructions": "ایک گولی جب درد ہو",
+        "duration": "20"
+    },
+    {
+        "name": "Cap Co-Deeprex 3mg/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Co-Deprex 3mg/25 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Co-Deprex Plus 6mg/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Co-Depricap 3 mg/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Cyno D",
+        "instructions": "ایک کیپسول 15 دن کے بعد",
+        "duration": "2"
+    },
+    {
+        "name": "Cap DEPRICAP 20MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Dexxoo 60 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Cap Dobalta 20 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Dobalta 30 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Cap Duzalta 20mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Cap Duzalta 30mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Cap Dygab 25 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Dygab 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Edwin D",
+        "instructions": "ایک کیپسول 15 دن کے بعد",
+        "duration": "2"
+    },
+    {
+        "name": "Cap Emaxlon 1.5 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Emaxlon 3 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Enz Care",
+        "instructions": "ایک کیپسو ل صبح ناشتے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Exult",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Cap Flunzic 5mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Frogran 5mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Cap Gaboz 300 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Galaxy 20mg",
+        "instructions": "ایک کیپسو ل صبح ناشتے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Ginlyf",
+        "instructions": "ایک کیپسو ل صبح ناشتے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Cap LUNER",
+        "instructions": "NULL",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Lingab 25mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Cap Lintazip-F 3/25",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Lintazip-F 6/25mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Medirica 100 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Medirica 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Medirica 75 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Melax Plus",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Methymin 2000micro",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Migram 5 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Mucogin  4 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Muscolax 4 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Muscorex 4mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap NEOGAB 300MG",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Neolyf",
+        "instructions": "NULL",
+        "duration": "10"
+    },
+    {
+        "name": "Cap Nulex 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap OlanzaMark 3/25",
+        "instructions": "ایک کیپسو ل صبح ناشتے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Ozip plus 3/25",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Ozip plus 6/25 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Pois 40 mg",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Prebica 100 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Prebica 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Prebica 75 mg",
+        "instructions": "ایک کیپسو ل صبح ناشتے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Cap Pregaba 100",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Pregaba 50",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Pregaba 75mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Pregabin 75 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Pregofarm 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Pregofarm 75 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Primemark 100 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Primemark 25 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Primemark 25mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Primemark 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Primemark 75 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Proside 4 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Q-Lyf",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap REGAB 50MG",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap SIBELIUM 5MG",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap SYNGAB 50MG",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap Skelebenz SR 15 mg",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Thiowrd 4 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Cap Vyolen 50 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Cap ZENBAR 20MG",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap ZENBAR 30MG",
+        "instructions": "ایک کیپسول رات کو",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "Cap Zelco",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "NULL"
+    },
+    {
+        "name": "Cap Zelmira",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Cap Zuloxet 30 mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Caps Lunar 5mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Drol D inj",
+        "instructions": "ایک ٹیکہ 15 دن کے بعد پانی میں ڈال کر پیئں",
+        "duration": "2"
+    },
+    {
+        "name": "Drop Alca M",
+        "instructions": "بیس قطرے صبح شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Drop Clonopin 10ml/2.5mg",
+        "instructions": "NULL",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Drop RAYYAN",
+        "instructions": "بیس قطرے صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Ensure powder",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Gel DAKTARIN 2% 20GM",
+        "instructions": "مقامی طور پر لگایئں",
+        "duration": "NULL"
+    },
+    {
+        "name": "Glucerna Powder",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "INFU ZOVIRAX 250MG",
+        "instructions": "آدھی گولی ایک دن چھوڑ کر",
+        "duration": "NULL"
+    },
+    {
+        "name": "Ing Tromit",
+        "instructions": "ایک ٹیکہ گوشت میں اگر درد ھو",
+        "duration": "NULL"
+    },
+    {
+        "name": "Inj BRITANYL 0.5MG/ML",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Inj Bio Mec",
+        "instructions": "ایک ٹیکہ ایک دن چھوڑ رگ     لگائں",
+        "duration": "15"
+    },
+    {
+        "name": "Inj Cobalmin",
+        "instructions": "ایک ٹیکہ ایک دن چھوڑ رگ     لگائں",
+        "duration": "15"
+    },
+    {
+        "name": "Inj Fycalci 5mg/ml (200,000 units)",
+        "instructions": "ایک ٹیکہ 15 دن کے بعد پانی میں ڈال کر پیئں",
+        "duration": "2"
+    },
+    {
+        "name": "Inj IMPULS 500MCG/ml",
+        "instructions": "ایک ٹیکہ ایک دن چھوڑ رگ     لگائں",
+        "duration": "15"
+    },
+    {
+        "name": "Inj Kerol 30 mg/ml",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "2"
+    },
+    {
+        "name": "Inj MANNITOL 20% IM/IV",
+        "instructions": "NULL",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Inj NEUROMET 500MCG/ml",
+        "instructions": "ایک ٹیکہ ایک دن چھوڑ رگ     لگائں",
+        "duration": "20"
+    },
+    {
+        "name": "Inj OXIDIL 1GM IV",
+        "instructions": "ایک ٹیکہ صبح،شام خون کی رگ میں",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "Inj SERENACE 5MG/ML",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Inj THIOLAX 4MG",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "2"
+    },
+    {
+        "name": "Inj Tromit 30 mg I/M",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Inj VENOFER 20MG/ML",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Inj valium 5 mg",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Ligona Sachet",
+        "instructions": "ایک پیکٹ روزانہ",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "ORS",
+        "instructions": "ایک پیکٹ روزانہ",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "ORS Lemon",
+        "instructions": "ایک پیکٹ روزانہ",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "ORS Orange",
+        "instructions": "ایک پیکٹ جب ضرورت ہو",
+        "duration": "10"
+    },
+    {
+        "name": "Osmolar ORS",
+        "instructions": "ایک پیکٹ روزانہ",
+        "duration": "15"
+    },
+    {
+        "name": "Polyfax eye oint",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Polyfax skin ointment",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Refil D Drops",
+        "instructions": "NULL",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Resource Diabetes",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Resource optimum",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Rivotril drop",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "SYP Maculovit",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "تین ماہ"
+    },
+    {
+        "name": "Sachet  Ultragen",
+        "instructions": "ایک پیکٹ روزانہ",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Skilax drops",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Susp BRUFEN 100MG/5ml",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Syp  Polybion",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Acutite",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Amico M",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Apofit",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Appi-Max",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Avetize",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Bio-Z",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Bisor-F",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp CVA plus",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Cidin",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Cidni",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Syp Co Leen",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Syp Cotine",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Creslin",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Syp DIPODIUM 500MG/5ml",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Syp Dolizo",
+        "instructions": "NULL",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Epival 250mg",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Ergo",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Evic 100 mg/ml",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Forpliz",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Gelton",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Ginkion",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Ginkobell",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Syp Ginktex",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Ginlyf",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Intellan",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Kalv",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp LERACE 100MG/ml",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Lac D",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Laxolac 120ml",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Lysofer",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Macholine",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Maculovit",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Megalyf",
+        "instructions": "ایک چمچ روزانہ",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Megavant",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Neline",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Syp Neoris",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Nutroton",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Ozid",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Pari Gene",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Previt",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp R Colin",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Raze 1mg/ml",
+        "instructions": "NULL",
+        "duration": "تین ماہ"
+    },
+    {
+        "name": "Syp Recept",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Rehabitol",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Riveme 2mg/ml",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Stoga Junior",
+        "instructions": "بیس قطرے صبح شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Tabin",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "2"
+    },
+    {
+        "name": "Syp Tioxide extra",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Syp Tricoline 250 mg",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Tricoline 500 mg",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Syp Vepridone  60ml",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Vetrawin 100 mg /ml",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp XEEBON",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp Xeto",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Syp ZIRON-F",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "TAB ACLOVA 400MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "TAB DRATE PLUS-D 70MG/70MCG",
+        "instructions": "NULL",
+        "duration": "2"
+    },
+    {
+        "name": "TAB ZYLORIC 300MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab ALINAMIN-F",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab ALP 0.5MG",
+        "instructions": "آدھی گولی صبح",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab AMYGRA 60MG",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab ASCARD PLUS 75MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab AUGMENTIN 1gm",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "Tab AUGMENTIN 375MG",
+        "instructions": "ایک  گولی صبح ،دوپہر،شام کھانے کے بعد",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "Tab AUGMENTIN 625MG",
+        "instructions": "ایک  گولی صبح ،دوپہر،شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab AVSAR 5MG/80MG",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Acenac 100 mg",
+        "instructions": "ایک گولی جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Acosa  50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Acosa 100 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Adronil 150mg",
+        "instructions": "ایک گولی ھر ما ہ        خالی پیٹ آدھا گھنٹہ مت لیٹیں",
+        "duration": "2"
+    },
+    {
+        "name": "Tab Alzilo 0.5",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Alzilo 1mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Amlod--P 10/8 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Amlod-P 5/4",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Amro 10 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Amtec 25 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Amtec 50 mg",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Anpra 0.25mg",
+        "instructions": "ایک گولی جب ضرورت ہو",
+        "duration": "20"
+    },
+    {
+        "name": "Tab Apprid 1mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Arigit 10 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Arigit 15mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ariper 15 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Arthromax",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ascard 75 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Atcam 8 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Atcomid 100",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Atcomid 50",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Atconate 150 mg",
+        "instructions": "ایک گولی ھر ما ہ        خالی پیٹ آدھا گھنٹہ مت لیٹیں",
+        "duration": "2"
+    },
+    {
+        "name": "Tab Auroprox CR 25 mg",
+        "instructions": "آدھی گولی روزانہ  صبح   7دن اسکے بعد پوری گولی",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab Avibex",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Axal 0.25 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Axal 0.5 mg",
+        "instructions": "آدھی گولی صبح",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Axal 1 mg",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Azm",
+        "instructions": "آدھی گولی صبح",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Azolam 0.25",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Azolam 0.5",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab B-Rex",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab BLF 10 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab BREDIN 30MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab BRITANYL 2.5MG",
+        "instructions": "ایک  گولی صبح ،دوپہر،شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab BROTIN 2.5MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab BUSRON 5MG",
+        "instructions": "ایک  گولی صبح ،دوپہر،شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Bacfen 10 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Baclin",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Baxa 10 mg",
+        "instructions": "آدھی گولی روزانہ  صبح   7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Benet",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Benzodep  5 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Beprawin 20 mg",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Biocart",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Boltrum",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Boun-T",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Brivera 25 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Brivera 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Butical",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Butical chewable",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab C-Pam 0.5 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab CALAN 40MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab CARDIOLITE 25MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab CM-ZE",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab CYTOTREXATE 10MG",
+        "instructions": "ایک گولی ھر اتوار کو کھا نے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab CYTOTREXATE 2.5MG",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Cabilov 25/100/200",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Cal DK",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab CalBless",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Caloc V 10/160",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Caloc V 5/160",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Caloc V 5/80",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Cara 20 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Caratine10 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Cardiolite 25 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Caycal D",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Cecon 500 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Citograin 500 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Clomixet 25mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Tab Clonazep 0.5 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Clonazep 2mg",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Clonexa 2 mg",
+        "instructions": "ایک گولی اگر نیند نہ آے",
+        "duration": "10"
+    },
+    {
+        "name": "Tab Clonopin 0.5 mg",
+        "instructions": "آدھی گولی صبح",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Clopra 25mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Co-Purpal 500/20 mg",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Codopa 25/100mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Codopa 25/250mg",
+        "instructions": "NULL",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Cosa M 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Cosa M 50 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Cosad",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Cozim",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Cytotrexate 2.5",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab DAPAKAN 500MG",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab DEPREL 50MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab DETRUSITOL 4MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab DIPODIUM 500MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab DONECEPT 5MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab DOSIK 5mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Danz-N 20 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Deeno M",
+        "instructions": "ایک گولی اگر نیند نہ آے",
+        "duration": "10"
+    },
+    {
+        "name": "Tab Deltacortil EC",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Demantin 10 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Dementio ER 8 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Demil",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Deprel 100 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Detriflow 2 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Dio-Plus 10/160",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab DioPlus 10/160",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab DioPlus 5/160mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab DioPlus 5/80",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Dioplus 5/80 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Dipodium 250 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Domflash",
+        "instructions": "ایک گولی جب ضرورت ہو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Donep 10 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Donep 5 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Dosik 1.5mg",
+        "instructions": "NULL",
+        "duration": "تین ماہ"
+    },
+    {
+        "name": "Tab Dynapram 10mg",
+        "instructions": "NULL",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Dysoprin 10 mg",
+        "instructions": "آدھی گولی روزانہ  صبح   7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab ERBRO 25MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab ERBRO 50MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab ES-PRAMCIT 10MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab EXAPRO 10MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab EXAPRO 5MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab EXTOR 10MG/160MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab EXTOR 5MG/160MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab EXTOR 5MG/80MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Eel",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Elecon",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Elopram 10mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Emptin 50 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Epicar 200 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Epitab XR  200 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Epival 250",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Epival 500",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Epival-CR 500MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Eprison 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Eprispa 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Epry 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ergo",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ertaline 100 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Ertaline 50 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Esglit 10 mg",
+        "instructions": "آدھی گولی روزانہ  صبح   7دن اسکے بعد پوری گولی",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Esilgan 1 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Estanax 2 mg",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Estid 10 mg",
+        "instructions": "آدھی گولی صبح",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Esto-D 10 mg",
+        "instructions": "آدھی گولی صبح",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Eszopic 2mg",
+        "instructions": "ایک گولی اگر نیند نہ آے",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Evic 250 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Evic 500 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Extenze",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Exval-A 10/160mg",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab Exval-A 5/80",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab FAVERIN 100MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Fascom 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Fascom 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Febro FA",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Fedracam 20 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Ferrtex",
+        "instructions": "ایک گولی ایک دن چھوڑ کر",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Fertex",
+        "instructions": "ایک گولی ایک دن چھوڑ کر",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Folcid",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Folic Acid",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Forpliz",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab GEPENT 300MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab GETRYL 1MG",
+        "instructions": "NULL",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab GETRYL 2MG",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab Gastrosec 40 mg",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Gelton",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Gin-Q",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Gouric 40 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab HCQ 200 200MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab HERBESSER 30MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab HITOP 100MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab HITOP 50MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab HS Forte",
+        "instructions": "ایک گولی ایک دن چھوڑ کر",
+        "duration": "دو ماہ"
+    },
+    {
+        "name": "Tab Havocol",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Hectorol",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Helixa 10 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Hisbet 8 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab INDERAL 10MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab INDERAL 40MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab ITAB Plus",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Im-DZ",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Impulse DZ",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Itolax 50mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Jelmin",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Juline 5mg",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab KEMADRIN 5MG",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab KEMPRO 5MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Kalv",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Kinoct 10 mg",
+        "instructions": "ایک گولی اگر نیند نہ آے",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Koctra",
+        "instructions": "ایک گولی ایک دن چھوڑ کر",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab LAMNET 100MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab LAMNET 25MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab LAMNET 50MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab LEGENT 25MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab LEGENT 50MG",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab LERACE 250MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab LIMIGZOL 2.5MG",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab LOPRIN 75MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab LOWPLAT PLUS 75MG/75MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab LUMARK 250MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab LUMARK 500MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lac D",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Lacolep 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Lacolep 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lacosta 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lacosta 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lame 10 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lamepil 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lamepil 50 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Lamitor 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lamitor 25mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lamitor 50mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lamotec 100 mg",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lamotec 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lamtrigin 100 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lamtrigin 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lemfo",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lepsi 250 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Lepsi 500 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Levenue 250 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lidro 5mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Limgit 25",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Lintazip 10mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lintazip 5mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Lintre 50mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Liorex",
+        "instructions": "دو گولیاں صبح،دوپہر،شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Listan AM 5/80",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Loryas 8 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Lorzaf 8 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "20"
+    },
+    {
+        "name": "Tab Lowplat 75",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Loxi 8 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Loxze 8 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab MEP Z",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab METHOTREXATE 10MG",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Tab MYRIN-P",
+        "instructions": "NULL",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab MYRIN-P FORTE",
+        "instructions": "NULL",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab Macholine Plus",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Maculovit",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Maculovit DX",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Magnor",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Mecogen SL 1000 micro",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Mecosyn",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Megavant",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Megit 15 mg",
+        "instructions": "ایک گولی رات کو سات دن اس کےبعد دو گولی رات کو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Mirtawel 15 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Mirtawel 30mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Mirtax 15mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Tab Mitaz 15 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Mitaz 15mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Mitaz 30 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "تین ماہ"
+    },
+    {
+        "name": "Tab Mitzap 15mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Modton 25 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Morcet 10 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Multi-Bion +",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Mytodia",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab NAVIDOXINE 25MG/50MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab NEOLEXA 10MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab NEOMERCAZOLE 5MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab NEUXAM 0.25MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab NEUXAM 0.5",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab NOVIDAT 500MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین دن کیلئے"
+    },
+    {
+        "name": "Tab Nax 0.5 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Nervex 300 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Neurobell",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Neurolith SR 400 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Neuxam 0.25 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Neuxam 1mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Nimoden 30 mg",
+        "instructions": "دو گولیاں صبح،دوپہر،شام کھانے کے بعد",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Tab Nimopro 30 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Norvasc 10 mg",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Noxilor",
+        "instructions": "ایک چمچہ صبح،شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Noxilor 8mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "20"
+    },
+    {
+        "name": "Tab Nupir 5 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Nurosa 100mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Nurosa 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab OD BAL 300 mcg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab OGREL PLUS 81",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Ogrel 81",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab Olpiine 10 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Olpiine 5 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Orimate 50 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Osmac",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Osteotec 50 mg",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Osteotec 75 mg",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Oxcarb 300mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Oxyclor 200 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ozip 10 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ozip 5 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab PHENOBARBITONE 30MG",
+        "instructions": "NULL",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab PK-MERZ 100MG",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab PLETAAL 100MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab PLETAAL 50MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab PREDNISOLONE 5MG",
+        "instructions": "دو گولی صبح دو گولی شام کھانے کے بعد",
+        "duration": "پانچ دن"
+    },
+    {
+        "name": "Tab Panacam 8mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Paridopa 50/12.5/200",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Paridopa100/25/200",
+        "instructions": "NULL",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Paroxin CR 12.5",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Paroxin CR 25 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Pause 2 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Tab Penmark 40 mg",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Pentoxol  1mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Pequit 100 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Perinef",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Pexeva CR 25 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Pirosyn-B",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Pralzo 0.5 mg",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Prevexa 10 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "Tab Primed 1mg",
+        "instructions": "آدھی گولی صبح",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Prinol 50 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Procye 5mg",
+        "instructions": "آدھی گولی صبح",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab Prolam 0.25 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Prolam 0.5 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Propinol 0.25 mg",
+        "instructions": "ایک گولی رات کو سات دن اس کےبعد دو گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Propinol 1 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Propinol 1mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Prothiadine 25 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Prothiadine 75 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Proxetin",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Qutia 100 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Qutia 25 mg",
+        "instructions": "ایک گولی جب ضرورت ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab RISP 1MG",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab ROPINOL 0.25MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab ROPINOL 1MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab ROSULIN 10MG",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab ROSULIN 5MG",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Rabosh 20 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Ramargon 15 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Rapicort 5 mg",
+        "instructions": "دو گولیاں صبح،دوپہر،شام کھانے کے بعد",
+        "duration": "تین دن کیلئے"
+    },
+    {
+        "name": "Tab Raze 1mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Recept 1 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Rementia 10 mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Reol 1mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Revoban 10 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Revolt 10 mg",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Revolt 20 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Rismek 1 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Riss 1mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Tab Rivotril 0.5 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Rivotril 2mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Rova 10 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Rovator 10 mg",
+        "instructions": "آدھی گولی شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Rovator 5 mg",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Rusiam 10 mg",
+        "instructions": "آدھی گولی شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab SEDONIL 1.5MG",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab SEDONIL 3MG",
+        "instructions": "ایک گولی اگر نیند نہ آے",
+        "duration": "10"
+    },
+    {
+        "name": "Tab SELGIN 5MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab SERENACE 1.5MG",
+        "instructions": "دو گولی صبح دو گولی شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab SERENACE 10MG",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab SERENACE 5MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab SINEMET 25MG/250MG",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "Tab SL Gan 1mg",
+        "instructions": "چوتھا ھصہ صبح ناشتے کے بعد",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab SL-Gan  2mg",
+        "instructions": "آدھی گولی صبح اور ایک گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Sadoquil 100mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Sadoquil 25mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Schizolan 10 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Seizoram 250 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Seizoram 500 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Seizunil 200 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Sengo",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Seon 100mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Seon 50mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Setril 0.5 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Sinemet Extra 25/100",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Sitan 500/85 mg",
+        "instructions": "آدھی گولی جب ضرورت ہو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Skilax",
+        "instructions": "دو گولی رات کو اگر قبض ھو",
+        "duration": "20"
+    },
+    {
+        "name": "Tab Sleepmate",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Softin",
+        "instructions": "ایک گولی جب ضرورت ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab Soyal 10mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Soyal 15 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Spiromide 20 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Stabler 24 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Sulpy 25 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Sulpy 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Sumoxin",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Swazapin 10 mg",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Synflex M",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "10"
+    },
+    {
+        "name": "Tab T-MAT 25MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab T-MAT 50MG",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab THYROXINE 50MCG",
+        "instructions": "دہ گولی صبح ناشٹے سے پہلے",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab TOPAGEN 25MG",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "پندرہ دن"
+    },
+    {
+        "name": "Tab TOPAGEN 50MG",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab TORATE 25MG",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab TORATE 50MG",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab TRAZOLAM 100MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab TRAZOLAM 50MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab TRIOPTAL 300MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab TRIPTAN 2.5MG",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "10"
+    },
+    {
+        "name": "Tab Tanpado 75 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Tegral 200 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Tenormin 25 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Tnsles 15 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Tnsles 30 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Topmark 50mg",
+        "instructions": "آدھی گولی روزانہ رات کو 7دن اسکے بعد پوری گولی",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab Tovir 0.5",
+        "instructions": "آدھی گولی صبح",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Tramal Plus",
+        "instructions": "ایک گولی جب درد ہو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Tramol SR",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Tromser 50 mg",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Tromser-P",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Tydel",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Urixin 400 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "سات دن کیلئے"
+    },
+    {
+        "name": "Tab VITA-6 50MG",
+        "instructions": "NULL",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab VOXAMINE 100MG",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab VOXAMINE 50MG",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Vaptor 10 mg",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Vepridone 1 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Vesopride 25 mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Vesopride 50 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Vetrawin 500",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Vitamon",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Wafon Rapid",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Tab X -Plended 20 mg",
+        "instructions": "آدھی گولی شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab X-Plended 10 mg",
+        "instructions": "آدھی گولی شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab X-Plended 20 mg",
+        "instructions": "آدھی گولی شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Xalia 10mg",
+        "instructions": "آدھی گولی صبح، شام",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Xaslexx SR 75",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Xavor 50 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Xavor DIU 50/12.5",
+        "instructions": "ایک گولی رات کو",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab Xcept 15 mg",
+        "instructions": "NULL",
+        "duration": "ا ماہ"
+    },
+    {
+        "name": "Tab Xcept 20 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Xeebon",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Xell 10 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Xeto",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Ytig",
+        "instructions": "ایک گولی شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab ZESTRIL 5MG",
+        "instructions": "ایک گولی رات کو",
+        "duration": "جاری رکھیں"
+    },
+    {
+        "name": "Tab ZIPTAN 2.5MG",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab ZIRON-F",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab ZOPENT 40MG",
+        "instructions": "ایک گولی صبح کھانے سے پہلے",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Zap 10 mg",
+        "instructions": "NULL",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zap 5 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Zeflam",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Zeflam plus",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zelmira",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zexa 10 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zilnox 10 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zipdep 15 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Zipdep 30 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zitrigine 100 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zitrigine 50 mg",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab Zivas 3 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Tab Zolimit 2.5 mg",
+        "instructions": "ایک گولی جب درد تیز ھو",
+        "duration": "5"
+    },
+    {
+        "name": "Tab Zonas 100 mg",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Zopalet 10mg",
+        "instructions": "ایک گولی اگر نیند نہ آے",
+        "duration": "20"
+    },
+    {
+        "name": "Tab d-cobal",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "Tab vitamin C wilson",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "Zolmipine Spray",
+        "instructions": "NULL",
+        "duration": "NULL"
+    },
+    {
+        "name": "cap pregofarm 50mg",
+        "instructions": "ایک کیپسول صبح شام",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "ge;",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "inj Calmaks",
+        "instructions": "ایک ٹیکہ 15 دن کے بعد پانی میں ڈال کر پیئں",
+        "duration": "2"
+    },
+    {
+        "name": "inj Calmks",
+        "instructions": "ایک ٹیکہ 15 دن کے بعد پانی میں ڈال کر پیئں",
+        "duration": "2"
+    },
+    {
+        "name": "inj Dan D",
+        "instructions": "ایک ٹیکہ 15 دن کے بعد پانی میں ڈال کر پیئں",
+        "duration": "2"
+    },
+    {
+        "name": "inj Muscolin 4mg/2ml",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "2"
+    },
+    {
+        "name": "inj Thiolax i/m",
+        "instructions": "ایک ٹیکہ فوری طور پر اور اس کے بعد جب ضرورت ھو",
+        "duration": "2"
+    },
+    {
+        "name": "inj Trio-D",
+        "instructions": "ایک ٹیکہ 15 دن کے بعد پانی میں ڈال کر پیئں",
+        "duration": "2"
+    },
+    {
+        "name": "pzo[",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    },
+    {
+        "name": "tab Danzen DS",
+        "instructions": "ایک   گولی صبح شام کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "tab Megavant",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "tab Ogrel 75 mg",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "دو ہفتے کیلئے"
+    },
+    {
+        "name": "tab Regen",
+        "instructions": "ایک صبح کھانے کے بعد",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "tab soften 10 mg",
+        "instructions": "ایک گولی جب ضرورت ہو",
+        "duration": "15"
+    },
+    {
+        "name": "zaxa",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "ایک ماہ کیلئے"
+    }
+]

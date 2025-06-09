@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Tab SL Gan 1mg",
+        "generic_name": "Estazolam",
+        "instructions": "½ - ¼ رات کو",
+        "duration": "تین ماہ"
+    },
+    {
+        "name": "Tab Dioplus 5/80 mg",
+        "generic_name": "Amlodipine & Valsartan",
+        "instructions": "ایک گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab Atcam 8 mg",
+        "generic_name": "Lornoxicam",
+        "instructions": "ایک گولی روزانہ شام کو تین دن کیلئے اس کے بعد جب درد ہو",
+        "duration": "15"
+    },
+    {
+        "name": "Cap Cyno D 200000IU",
+        "generic_name": "Cholecalciferol",
+        "instructions": "ایک کیپسول 5 دن کے بعد",
+        "duration": "6"
+    },
+    {
+        "name": "Tab Ozip 5 mg",
+        "generic_name": "Olanzapine",
+        "instructions": "آدھی گولی رات کو",
+        "duration": "تین ماہ کے لیے"
+    },
+    {
+        "name": "Tab HS Forte",
+        "generic_name": "Biotin,Collagen,CoQ10, Multiple vita",
+        "instructions": "ایک گولی ایک دن چھوڑ کر",
+        "duration": "تین ماہ"
+    }
+] 
