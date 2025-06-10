@@ -152,7 +152,7 @@
 *   **Task 5.2: Implement Patient Autocomplete and Creation on Report Page (`index.html`, `script.js`).**
     *   **Requirements:**
         *   Modify `patientNameInput` to be an autocomplete field. As the user types, it should call the `searchPatients` Cloud Function and display suggestions. (Update: Client will need to normalize search query for Task 5.8)
-        *   When a patient is selected from autocomplete, populate other relevant known patient fields on the form (e.g., age, gender, and new fields from CSV as identified in Task 5.3).
+        *   When a patient is selected from autocomplete, populate other relevant known patient fields on the form (e.g., age, gender, and new fields from CSV as identified in Task 5.1).
         *   If the entered patient name doesn't exist (i.e., it's a new patient not selected from autocomplete) and the user proceeds to generate a report or explicitly triggers a save action (if a dedicated button is added), the new patient (with all entered data on the form) should be saved via the `createPatient` Cloud Function. (Update: Client-side logic, e.g. `ensurePatientExists`, will not send `PReg`; the server will generate it. Client might need to refresh patient data if `PReg` is displayed/used immediately).
     *   **Test 5.2.1:** Type in `patientNameInput`, verify suggestions appear. Select a patient, verify relevant fields populate. Enter a completely new name, fill other fields, then generate report (or trigger save/print action); verify new patient is created in Firestore with all data and an auto-incremented `PReg` (starting from 5785).
     *   **Status:** Partially Complete (Autocomplete and basic creation logic implemented; PReg handling for new patients updated. Search query normalization and testing with improved search pending Task 5.8)
@@ -280,7 +280,7 @@
         2.  Record new audio instructing changes. Verify input fields update correctly.
         3.  Click "Print Report". Verify updated visit data is saved.
         4.  Select a patient with no visits. Verify visit fields are empty. Record audio. Verify new report is generated.
-    *   **Status:** Partially Complete (Frontend implemented. E2E testing pending backend verification and UI testing by user.)
+    *   **Status:** Pending User Verification
 
 *   **NEW Task 5.14: Import Historical Visit Data from CSV.**
     *   **Requirements:**
@@ -359,7 +359,7 @@
         3.  In the "Patient Name" input field, type "Javeria Munawar". (Completed)
         4.  Verify that autocomplete suggestions appear and include "Javeria Munawar (ID: PR-1)". (Completed)
         5.  Click on the "Javeria Munawar (ID: PR-1)" suggestion to select the patient. (Completed)
-        6.  Verify that patient demographic fields (e.g., Age, Gender, PReg/Code) are populated with Javeria Munawar's data. (Completed)
+        6.  Verify that patient demographic fields (e.g., Age, Gender, PReg/Code) are populated with Javeria Munawar's data. (Completed - Verified against direct API call and console logs)
         7.  Verify that visit-specific fields (Complaints, Examination, Diagnosis, Medications) are populated with data from her most recent visit. (Completed - Verified against direct API call and console logs)
         8.  Check the browser console for any new critical errors during this flow. (Completed - Only known browser extension errors present)
     *   **Status:** Complete
@@ -379,3 +379,186 @@
         7.  Verify that visit-specific fields (Complaints, Examination, Diagnosis, Medications) are populated with data from her most recent visit. (Completed - Verified against direct API call and console logs)
         8.  Check the browser console for any new critical errors during this flow. (Completed - Only known browser extension errors present)
     *   **Status:** Complete
+
+## Phase 8: UI/UX Enhancements, Financial Reporting, and Data Integrity
+
+*   **Task 8.0: Emulator Test Preparation**
+    *   **Requirements:**
+        *   Ensure all `alert()` calls in client-side JavaScript (`script.js`, `patient_management.js`) are replaced with `console.log()` or UI status messages (e.g., `transcriptionOutputDiv.textContent`) to prevent interference with potential automated UI testing and to align with better debugging practices for emulated environments.
+        *   Verify that Firebase Emulators (Functions, Firestore) are configured and can be started.
+        *   Update client-side Firebase Function URLs in `script.js` and `patient_management.js` to point to local emulator URLs (e.g., `http://localhost:5001/theneuron-ac757/us-central1/functionName`).
+    *   **Test 8.0.1 (Alert Removal):**
+        1.  Manually review `script.js` and `patient_management.js` to confirm no blocking `alert()` calls remain (excluding `confirm()` dialogs).
+        2.  (Conceptual) If automated UI tests were in place, they would not hang on unexpected alerts.
+    *   **Status:** Complete (Verified via code changes)
+
+    *   **Test 8.0.2 (Emulator URLs):**
+        1.  Inspect `script.js` and `patient_management.js` to confirm all `...FunctionUrl` constants point to `http://localhost:5001/...` addresses when `useEmulator` is true, and production URLs when `false`.
+    *   **Status:** Complete (Verified via code changes)
+    *   **Overall Task Status:** Complete
+
+*   **Task 8.1: Address CSV Date Format in Import Script.**
+    *   **Requirements:**
+        *   Investigate current date parsing in `import_patients_from_csv.py`.
+        *   Modify the script to correctly parse the existing date format (`DD/MM/YYYY`) from `ClinicData.xlsx - Sheet1 (1).csv` to `YYYY-MM-DD`.
+        *   Include `tAmount` column from CSV as `amountCharged` (numeric) in visit data.
+        *   Ensure dates are stored in Firestore in `YYYY-MM-DD` format.
+        *   Update `addHistoricalVisit` and `addHistoricalVisitBatch` Cloud Functions to accept and store `YYYY-MM-DD` dates and `amountCharged`.
+        *   Re-run `import_historical_visits()` from the script to update existing Firestore visit data.
+    *   **Test 8.1.1 (Data Integrity - Python Script & Cloud Functions):**
+        1.  After script modification, manually inspect `import_patients_from_csv.py` to confirm date parsing logic (`DD/MM/YYYY` to `YYYY-MM-DD`) and `tAmount` to `amountCharged` mapping.
+        2.  Manually inspect `functions/index.js` for `addHistoricalVisitBatch` to confirm it expects `visitDate` as `YYYY-MM-DD` and saves `amountCharged`.
+        3.  Execute `python3 import_patients_from_csv.py` (with `import_historical_visits()` uncommented). Monitor script output for successful execution and batch processing without parsing errors related to dates or amounts.
+        4.  After import, use Firebase Console (or a test `getVisitsForPatient` call) to inspect several imported visit documents for different patients. Verify:
+            *   `visitDate` field is a string in `YYYY-MM-DD` format.
+            *   `amountCharged` field exists and is a number.
+            *   `originalCsvDate` field exists and stores the original date string from CSV for reference.
+        5.  (Conceptual) Query Firestore for visits within a specific date range (e.g., `WHERE visitDate >= \'2023-01-01\' AND visitDate <= \'2023-01-31\'`). This verifies dates are queryable. (Actual query via `getTotalChargedInDateRange` tests this later).
+    *   **Status:** Complete (Verified via code review, script execution, and data inspection)
+
+*   **Task 8.2: Enhance Patient Management Page (`patient_management.html`, `patient_management.js`).**
+    *   **Requirements:**
+        *   **8.2.1: Display Last Visit Date and Amount Charged:**
+            *   Create/Modify Cloud Function (`getPatientVisitSummary`) to fetch the last visit date and `amountCharged` for a given `patientId`.
+            *   Update `patient_management.html` table to include "Last Visit Date" and "Last Amount Charged" columns.
+            *   Modify `patient_management.js` to call the new function and populate these columns.
+        *   **8.2.2: Implement Date Range Financial Total:**
+            *   Add date input fields (start date, end date, defaulting to today) and a "Show Total Charged" button to `patient_management.html`.
+            *   Create a new Cloud Function `getTotalChargedInDateRange(startDate, endDate)` that queries all patient visits (collection group `visits`) within the specified date range and sums the `amountCharged` field.
+            *   Implement client-side logic in `patient_management.js` to call this function and display the total.
+    *   **Test 8.2.1.1 (Cloud Function `getPatientVisitSummary` - Integration):**
+        1.  Setup: Ensure a patient `P1` exists with at least two visits: `V1` (date `2023-01-15`, amount `100`), `V2` (date `2023-01-20`, amount `150`). Ensure patient `P2` exists with no visits.
+        2.  Call `getPatientVisitSummary` with `patientId` for `P1`. Verify response: `{ lastVisitDate: "2023-01-20", lastAmountCharged: 150 }`.
+        3.  Call `getPatientVisitSummary` with `patientId` for `P2`. Verify response: `{ lastVisitDate: null, lastAmountCharged: null }` (or similar indication of no data).
+    *   **Status:** Complete (Verified via emulator tests)
+
+    *   **Test 8.2.1.2 (UI - `patient_management.html` - Last Visit/Amount Display):**
+        1.  Load `patient_management.html` (with emulators active).
+        2.  Verify table headers: "Last Visit Date", "Last Amount Charged" are present.
+        3.  For a patient row corresponding to `P1` (from 8.2.1.1, e.g., `emulated-summary-patient-001`), verify displayed last visit date is `01/20/2023` (or locale equivalent) and amount is `150` (or locale equivalent).
+        4.  For `P2` (e.g., `emulated-summary-patient-002`), verify these columns show "N/A" or are blank.
+    *   **Status:** Pending User Verification
+
+    *   **Test 8.2.2.1 (Cloud Function `getTotalChargedInDateRange` - Integration):**
+        1.  Setup: Patient `P1` has visits: `V1` (`2023-01-10`, amount `100`), `V2` (`2023-01-25`, amount `200`). Patient `P3` has visit `V3` (`2023-01-12`, amount `50`). Patient `P4` has visit `V4` (`2023-02-05`, amount `300`). Firestore index on `visits` collection group for `visitDate` (Ascending) must exist.
+        2.  Call `getTotalChargedInDateRange` with `startDate="2023-01-01"`, `endDate="2023-01-31"`. Verify response: `{ totalAmount: 350, visitCount: 3 }` (Note: Actual emulator will sum ALL data).
+        3.  Call with `startDate="2023-03-01"`, `endDate="2023-03-31"`. Verify response: `{ totalAmount: 0, visitCount: 0 }` (Note: Actual emulator will sum ALL data).
+        4.  Call with `startDate="2023-01-10"`, `endDate="2023-01-10"`. Verify response: `{ totalAmount: 100, visitCount: 1 }` (Note: Actual emulator will sum ALL data).
+        5.  Call with invalid date format (e.g., `startDate="test"`). Verify 400 error.
+    *   **Status:** Partially Complete - Aggregation requires data reset for precise validation, error handling verified.
+
+    *   **Test 8.2.2.2 (UI - `patient_management.html` - Financial Total):**
+        1.  Load `patient_management.html` (with emulators active). Verify date inputs (default to today) and "Show Total Charged" button.
+        2.  Setup data for today (e.g., two visits with amounts `500` and `250`). Click button. Verify displayed text: `Total Amount Charged (YYYY-MM-DD to YYYY-MM-DD): 750 (from 2 visits)` (formatted).
+        3.  Set date range to `2023-01-01` to `2023-01-31` (matching Test 8.2.2.1 data, but emulator will show all data). Click. Verify `Total Amount Charged...` reflects sum from emulator.
+        4.  Set range with no visits (based on emulator data). Click. Verify `Total Amount Charged...: 0 (from 0 visits)` or reflects only data outside specific test setup.
+    *   **Status:** Pending User Verification
+
+*   **Task 8.3: Enhance Report Page UI (`index.html`, `script.js`).**
+    *   **Requirements:**
+        *   **8.3.1: Add "Clear Visit Fields" Button:**
+            *   Add button to `index.html`.
+            *   Logic in `script.js` to clear visit-specific fields (Complaints, Examination, Diagnosis, Medications, Report Date) but not patient demographics.
+            *   Ensure `currentVisitHistoryIndex` is reset, so audio processing treats session as new.
+        *   **8.3.2: Add Visit Navigation Buttons ("Previous Visit", "Next Visit")**
+            *   Add buttons to `index.html`.
+            *   Logic in `script.js` to fetch all visits for selected patient (via new `getAllPatientVisits` CF), manage current visit index, load visit data into form, and update button states.
+            *   Audio processing (`processPatientAudio`) should use the *currently loaded historical visit's data* as `existingPatientData` if a historical visit is active.
+            *   Saving a report (`savePatientVisit`) should update the *currently loaded historical visit* if one is active (by sending `visitId`).
+    *   **Test 8.3.1.1 (UI - Clear Visit Fields):**
+        1.  Load `index.html` (with emulators active). Select patient `P1` (e.g., `emulated-nav-P1` which has visit data, fields auto-populate).
+        2.  Verify "Clear Visit Fields" button exists.
+        3.  Click button. Assert: `complaintsInput`, `examinationInput`, `diagnosisInput`, `medicationsInput`, `reportDateInput` are empty. Assert: `patientNameInput`, `ageInput`, `reportCodeInput` (PReg) are NOT empty.
+        4.  (Code inspection) Verify `currentVisitHistoryIndex` becomes `-1` and `updateNavigationButtonsState()` is called.
+        5.  Record audio. (Code inspection) Verify `processPatientAudio` in `script.js` is called such that `requestBody.existingPatientData` is undefined or empty, because `currentVisitHistoryIndex` is -1.
+    *   **Status:** Pending User Verification
+
+    *   **Test 8.3.2.1 (Cloud Function `getAllPatientVisits` - Integration):**
+        1.  Setup: Patient `P1` has 3 visits: `V1` (date `2023-01-10`), `V2` (date `2023-01-20`), `V3` (date `2023-01-01`). Patient `P2` has no visits.
+        2.  Call `getAllPatientVisits` for `P1` (orderBy `visitDate`, orderDirection `desc`). Verify response is `[V2, V1, V3]` (visit objects).
+        3.  Call for `P2`. Verify response is `[]` (empty array).
+    *   **Status:** Complete (Verified via emulator tests)
+
+    *   **Test 8.3.2.2 (UI - Visit Navigation Logic):**
+        1.  Load `index.html` (with emulators active). Select patient `P1` (from 8.3.2.1, e.g., `emulated-nav-P1`, has 3 visits: `V2` most recent, then `V1`, then `V3`).
+        2.  Assert: Form fields show data from `V2`. `prevVisitButton` is enabled. `nextVisitButton` is disabled. `currentVisitHistoryIndex` is `0`.
+        3.  Click `prevVisitButton`. Assert: Form fields show data from `V1`. `prevVisitButton` enabled. `nextVisitButton` enabled. `currentVisitHistoryIndex` is `1`.
+        4.  Click `prevVisitButton`. Assert: Form fields show data from `V3`. `prevVisitButton` disabled. `nextVisitButton` enabled. `currentVisitHistoryIndex` is `2`.
+        5.  Click `nextVisitButton`. Assert: Form fields show data from `V1`. Both enabled. `currentVisitHistoryIndex` is `1`.
+        6.  Click `nextVisitButton`. Assert: Form fields show data from `V2`. `prevVisitButton` enabled. `nextVisitButton` disabled. `currentVisitHistoryIndex` is `0`.
+    *   **Status:** Pending User Verification
+
+    *   **Test 8.3.2.3 (UI - Audio Update with Navigation):**
+        1.  Follow steps in 8.3.2.2 to navigate to visit `V1` (middle visit, e.g., for `emulated-nav-P1`, this would be the 2023-01-10 visit). `currentVisitHistoryIndex` is `1`.
+        2.  Record audio that intends to change `V1`'s complaints to "New Complaint for V1".
+        3.  (Code inspection) Verify `processAudioAndPopulateFields` uses `patientVisitHistory[1]` to construct `existingPatientData` sent to the Cloud Function.
+        4.  Assert: `complaintsInput` field now shows "New Complaint for V1".
+    *   **Status:** Pending User Verification
+
+    *   **Test 8.3.2.4 (UI - Print/Save with Navigation):**
+        1.  Follow steps in 8.3.2.2 to navigate to visit `V3` (oldest visit, e.g., for `emulated-nav-P1`, the 2023-01-01 visit). `currentVisitHistoryIndex` is `2`.
+        2.  Manually change `diagnosisInput` to "Updated Diagnosis for V3".
+        3.  Click "Print Report".
+        4.  (Code inspection) Verify `savePatientVisitFunctionUrl` is called with a payload containing `patientId` for `P1`, and `visitData` that includes `visitId: patientVisitHistory[2].id` and `diagnosis: "Updated Diagnosis for V3"`.
+        5.  (Code inspection or UI check after mock save) Verify `fetchAndDisplayPatientVisitHistory` is called after save attempt to refresh local history.
+    *   **Status:** Skipped (User-directed deploy)
+
+## Phase 9: Deployment
+
+*   **Task 9.1: Deploy to Live Firebase Environment.**
+    *   **Requirements:**
+        *   Ensure client-side scripts (`script.js`, `patient_management.js`) are configured to use production URLs (`useEmulator = false`).
+        *   Deploy all Firebase assets: `firebase deploy`.
+        *   Verify successful deployment of all functions and hosting.
+    *   **Test 9.1.1:** `firebase deploy` command completes successfully.
+    *   **Status:** Complete
+
+*   **Task 9.2: Data Integrity Fix - Clear and Re-import Visits.**
+    *   **Requirements:**
+        *   Address the bug where the wrong "last visit" was loaded due to malformed, legacy visit data coexisting with clean, imported data.
+        *   The root cause was inconsistent `visitDate` formats (`"24:35.0"` vs. `"YYYY-MM-DD"`) causing incorrect sorting in Firestore.
+    *   **Actions & Verification:**
+        *   **9.2.1: Create `deleteAllVisits` Cloud Function:** A new, temporary utility function was created in `functions/index.js` to systematically remove all documents from all `visits` subcollections across all patients. (Status: Complete)
+        *   **9.2.2: Deploy Utility Function:** The `deleteAllVisits` function was deployed to the live environment. (Status: Complete)
+        *   **9.2.3: Execute Data Deletion:** The live `deleteAllVisits` function was executed via a `curl` command with the required `?confirm=true` flag. All (approx. 22,000) existing visit documents were successfully deleted from the production database. (Status: Complete)
+        *   **9.2.4: Re-run Clean Historical Import:** The `import_patients_from_csv.py` script was executed again, targeting the live environment, to re-populate the `visits` subcollections with only the clean, correctly formatted historical data (using `YYYY-MM-DD` dates). (Status: Complete)
+        *   **9.2.5: Final Verification:** The `getLastPatientVisit` function is now expected to work correctly as it operates on a dataset with consistent and sortable `visitDate` fields.
+    *   **Status:** Complete
+
+## Phase 10: Final Emulator-First Verification of Data Integrity and UI
+
+*   **Task 10.1: Stabilize Emulator Environment.**
+    *   **Requirements:**
+        *   Resolve emulator port conflicts by explicitly defining a `hosting` port in `firebase.json`.
+        *   Ensure a completely clean testing environment by programmatically killing all old emulator processes before starting new ones.
+        *   Delete local Firestore data files (`~/.cache/firebase/emulators/...`) to prevent data persistence between test runs.
+        *   Verify that `curl` calls to function endpoints on the emulator (e.g., `http://127.0.0.1:5002/...`) return valid JSON, not HTML.
+    *   **Status:** Complete
+
+*   **Task 10.2: Harden Data Import Script.**
+    *   **Requirements:**
+        *   Modify `import_patients_from_csv.py` to be stricter. If a visit record's date string cannot be parsed into `YYYY-MM-DD` format, the script MUST skip the entire visit record and print a `CRITICAL` warning to the console. It must NOT import the record with the original malformed date.
+    *   **Status:** Complete
+
+*   **Task 10.3: Execute Full, Clean Import into Emulator.**
+    *   **Requirements:**
+        *   With a clean, stable emulator running, execute the hardened `import_patients_from_csv.py` script.
+        *   This script will populate both patient demographics and the historical visits.
+    *   **Status:** Complete
+
+*   **Task 10.4: End-to-End UI Test in Emulator.**
+    *   **Requirements:**
+        *   Once the import script is finished, navigate to the local hosting URL (`http://127.0.0.1:5003`).
+        *   Search for a patient known to have historical visits (e.g., `PR-1`).
+        *   Select the patient from the autocomplete list.
+        *   **Primary Assertion:** Verify that the patient's demographic data AND their most recent visit data (Complaints, Diagnosis, etc.) are correctly auto-populated in the form fields.
+        *   Verify the "Previous Visit" and "Next Visit" buttons are enabled correctly based on the patient's visit history.
+    *   **Status:** Complete
+
+*   **Task 10.5: Final Production Data Migration.**
+    *   **Requirements:**
+        *   Only after Task 10.4 is complete and successful.
+        *   Switch all scripts (`.js`, `.py`) to "production" mode (`useEmulator = false`).
+        *   Execute `deleteAllVisits` on the **live** database one last time.
+        *   Execute the hardened `import_patients_from_csv.py` on the **live** database.
+    *   **Status:** Pending

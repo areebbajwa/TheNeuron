@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingMessage = document.getElementById('loadingMessage');
     const noPatientsMessage = document.getElementById('noPatientsMessage');
 
+    // Financial report elements
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const showTotalChargedBtn = document.getElementById('showTotalChargedBtn');
+    const totalChargedResultP = document.getElementById('totalChargedResult');
+
     // Input fields in the form
     const patientIdField = document.getElementById('patientId');
     const pRegForm = document.getElementById('pRegForm');
@@ -23,10 +29,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const addressForm = document.getElementById('addressForm');
 
     // --- Firebase Cloud Function URLs ---
-    const searchPatientsFunctionUrl = "https://searchpatients-pzytr7bzwa-uc.a.run.app";
-    const createPatientFunctionUrl = "https://createpatient-pzytr7bzwa-uc.a.run.app";
-    const updatePatientFunctionUrl = "https://updatepatient-pzytr7bzwa-uc.a.run.app"; 
-    const deletePatientFunctionUrl = "https://deletepatient-pzytr7bzwa-uc.a.run.app"; 
+    const useEmulator = false; // <--- SET TO true FOR EMULATOR, false FOR PRODUCTION
+
+    const prodProjectId = "theneuron-ac757";
+    const prodRegion = "us-central1";
+    // Base URL for production functions (adjust if your URLs differ, e.g. Cloud Run v2 unique URLs)
+    // const prodBaseUrl = `https://${prodRegion}-${prodProjectId}.cloudfunctions.net`;
+
+    const localProjectId = "theneuron-ac757";
+    const localRegion = "us-central1";
+    const localBaseUrl = "http://localhost:5002/theneuron-ac757/us-central1";
+
+    // Define production URLs directly if they have unique hostnames or complex paths
+    const prodSearchPatientsFunctionUrl = "https://searchpatients-pzytr7bzwa-uc.a.run.app";
+    const prodCreatePatientFunctionUrl = "https://createpatient-pzytr7bzwa-uc.a.run.app";
+    const prodUpdatePatientFunctionUrl = "https://updatepatient-pzytr7bzwa-uc.a.run.app";
+    const prodDeletePatientFunctionUrl = "https://deletepatient-pzytr7bzwa-uc.a.run.app";
+    const prodGetPatientVisitSummaryFunctionUrl = "https://us-central1-theneuron-ac757.cloudfunctions.net/getPatientVisitSummary";
+    const prodGetTotalChargedInDateRangeFunctionUrl = "https://us-central1-theneuron-ac757.cloudfunctions.net/getTotalChargedInDateRange";
+
+    const searchPatientsFunctionUrl = useEmulator ? `${localBaseUrl}/searchPatients` : prodSearchPatientsFunctionUrl;
+    const createPatientFunctionUrl = useEmulator ? `${localBaseUrl}/createPatient` : prodCreatePatientFunctionUrl;
+    const updatePatientFunctionUrl = useEmulator ? `${localBaseUrl}/updatePatient` : prodUpdatePatientFunctionUrl;
+    const deletePatientFunctionUrl = useEmulator ? `${localBaseUrl}/deletePatient` : prodDeletePatientFunctionUrl;
+    const getPatientVisitSummaryFunctionUrl = useEmulator ? `${localBaseUrl}/getPatientVisitSummary` : prodGetPatientVisitSummaryFunctionUrl;
+    const getTotalChargedInDateRangeFunctionUrl = useEmulator ? `${localBaseUrl}/getTotalChargedInDateRange` : prodGetTotalChargedInDateRangeFunctionUrl;
 
     let currentEditPatientId = null; // To store ID of patient being edited
 
@@ -54,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
         row.insertCell().textContent = patient.contactNo || 'N/A';
         row.insertCell().textContent = patient.nicNo || 'N/A';
         row.insertCell().textContent = patient.fatherName || 'N/A'; // This is Occupation
+        row.insertCell().textContent = patient.lastVisitDate ? new Date(patient.lastVisitDate).toLocaleDateString() : 'N/A';
+        row.insertCell().textContent = typeof patient.lastAmountCharged === 'number' ? patient.lastAmountCharged.toLocaleString() : 'N/A';
         
         const actionsCell = row.insertCell();
         const editButton = document.createElement('button');
@@ -75,29 +104,41 @@ document.addEventListener('DOMContentLoaded', () => {
         showNoPatientsMessage(false);
 
         try {
-            // For initial load, fetch a limited number of patients or based on a default query
-            // The searchPatients function expects a query 'q'. An empty 'q' might not be ideal.
-            // Let's use a wildcard or a very common letter, or assume the function handles empty q gracefully for a list.
-            // For now, let's assume an empty query string fetches a list or the most recent ones (up to default limit in CF).
-            // Or, we can specify a large limit if we want to get more initially.
-            const response = await fetch(`${searchPatientsFunctionUrl}?q=${encodeURIComponent(query)}&limit=50`); // Fetch up to 50 for initial list
+            const response = await fetch(`${searchPatientsFunctionUrl}?q=${encodeURIComponent(query)}&limit=50`); 
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Error fetching patients:', response.statusText, errorText);
-                alert(`Error fetching patients: ${response.statusText}`);
+                console.log(`Error fetching patients: ${response.statusText}`);
                 showLoading(false);
                 showNoPatientsMessage(true);
                 return;
             }
-            const patients = await response.json();
+            let patients = await response.json();
             if (patients.length === 0) {
                 showNoPatientsMessage(true);
             } else {
+                // Fetch visit summaries for each patient
+                const patientPromises = patients.map(async (patient) => {
+                    try {
+                        const summaryRes = await fetch(`${getPatientVisitSummaryFunctionUrl}?patientId=${patient.id}`);
+                        if (summaryRes.ok) {
+                            const summary = await summaryRes.json();
+                            return { ...patient, ...summary }; // Combine patient data with summary
+                        } else {
+                            console.warn(`Could not fetch visit summary for ${patient.id}: ${summaryRes.statusText}`);
+                            return { ...patient, lastVisitDate: null, lastAmountCharged: null }; // Default if fetch fails
+                        }
+                    } catch (summaryError) {
+                        console.error(`Error fetching visit summary for ${patient.id}:`, summaryError);
+                        return { ...patient, lastVisitDate: null, lastAmountCharged: null }; // Default on error
+                    }
+                });
+                patients = await Promise.all(patientPromises);
                 patients.forEach(renderPatientRow);
             }
         } catch (error) {
             console.error('Error fetching patients:', error);
-            alert(`Failed to load patients: ${error.message}`);
+            console.log(`Failed to load patients: ${error.message}`);
             showNoPatientsMessage(true);
         } finally {
             showLoading(false);
@@ -159,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if (!patientData.name) {
-            alert('Patient name is required.');
+            console.warn('Patient name is required.');
             return;
         }
 
@@ -190,12 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const result = await response.json();
-            alert(`Patient ${currentEditPatientId ? 'updated' : 'saved'} successfully! ID: ${result.patientId || currentEditPatientId}`);
+            console.log(`Patient ${currentEditPatientId ? 'updated' : 'saved'} successfully! ID: ${result.patientId || currentEditPatientId}`);
             hidePatientForm();
             fetchAndDisplayPatients(searchInput.value.trim()); // Refresh list with current search or all
         } catch (error) {
             console.error('Error saving patient:', error);
-            alert(`Error saving patient: ${error.message}`);
+            console.log(`Error saving patient: ${error.message}`);
         }
     }
 
@@ -215,11 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorResult.error || `Server error: ${response.status}`);
             }
 
-            alert(`Patient ${patientName} deleted successfully.`);
+            console.log(`Patient ${patientName} deleted successfully.`);
             fetchAndDisplayPatients(searchInput.value.trim()); // Refresh list
         } catch (error) {
             console.error('Error deleting patient:', error);
-            alert(`Error deleting patient: ${error.message}`);
+            console.log(`Error deleting patient: ${error.message}`);
         }
     }
     
@@ -241,7 +282,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Financial Report Logic
+    function setDateDefaults() {
+        const today = new Date().toISOString().split('T')[0];
+        if (startDateInput) startDateInput.value = today;
+        if (endDateInput) endDateInput.value = today;
+    }
+
+    async function handleShowTotalCharged() {
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+
+        if (!startDate || !endDate) {
+            console.warn('Please select both start and end dates.');
+            if(totalChargedResultP) { 
+                totalChargedResultP.textContent = 'Please select both start and end dates.';
+                totalChargedResultP.style.display = 'block';
+            }
+            return;
+        }
+        if (new Date(startDate) > new Date(endDate)) {
+            console.warn('Start date cannot be after end date.');
+            if(totalChargedResultP) { 
+                totalChargedResultP.textContent = 'Start date cannot be after end date.';
+                totalChargedResultP.style.display = 'block';
+            }
+            return;
+        }
+
+        totalChargedResultP.textContent = 'Calculating...';
+        totalChargedResultP.style.display = 'block';
+
+        try {
+            const response = await fetch(`${getTotalChargedInDateRangeFunctionUrl}?startDate=${startDate}&endDate=${endDate}`);
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'Failed to fetch total.' }));
+                throw new Error(errorData.error || `Server error: ${response.status}`);
+            }
+            const result = await response.json();
+            totalChargedResultP.textContent = `Total Amount Charged (${result.startDate} to ${result.endDate}): ${result.totalAmount.toLocaleString()} (from ${result.visitCount} visits)`;
+        } catch (error) {
+            console.error('Error fetching total charged:', error);
+            totalChargedResultP.textContent = `Error: ${error.message}`;
+        }
+    }
+
+    if (showTotalChargedBtn) {
+        showTotalChargedBtn.addEventListener('click', handleShowTotalCharged);
+    }
+
     // --- Initial Load ---
+    setDateDefaults(); // Set default dates for financial report
     fetchAndDisplayPatients(); // Load initial patient list
 
 }); 

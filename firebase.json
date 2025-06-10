@@ -28,24 +28,28 @@
         "source": "**",
         "destination": "/index.html"
       }
-    ]
+    ],
+    "port": 5003
   },
   "emulators": {
     "functions": {
-      "port": 5001
+      "port": 5002
     },
     "firestore": {
-      "port": 8081
+      "port": 8082
+    },
+    "hosting": {
+      "port": 5003
     },
     "hub": {
-      "port": 4402
+      "port": 4403
     },
     "ui": {
-      "port": 4002,
+      "port": 4003,
       "enabled": true
     },
     "logging": {
-      "port": 4502
+      "port": 4503
     }
   }
 }

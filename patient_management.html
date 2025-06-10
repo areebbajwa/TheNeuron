@@ -16,6 +16,16 @@
             <button id="addPatientBtn">Add New Patient</button>
         </div>
 
+        <div class="financial-toolbar">
+            <h3>Financial Report</h3>
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate">
+            <button id="showTotalChargedBtn">Show Total Charged</button>
+            <p id="totalChargedResult" style="display:none;"></p>
+        </div>
+
         <div id="patientFormContainer" class="form-container" style="display:none;">
             <h2 id="formTitle">Add New Patient</h2>
             <form id="patientForm">
@@ -80,6 +90,8 @@
                         <th>Contact</th>
                         <th>NIC</th>
                         <th>Occupation</th>
+                        <th>Last Visit Date</th>
+                        <th>Last Amount Charged</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

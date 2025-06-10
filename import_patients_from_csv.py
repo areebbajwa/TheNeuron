@@ -4,16 +4,39 @@ import http.client
 import time # For potential rate limiting
 from collections import defaultdict
 import re # For extracting PReg number
+from datetime import datetime # Added for date parsing
 
-CSV_FILE_PATH = "/Users/areebbajwa/Downloads/ClinicData.xlsx - Sheet1.csv"
+CSV_FILE_PATH = "/Users/areebbajwa/Downloads/ClinicData.xlsx - Sheet1 (1).csv" # Updated CSV Path
 
-# --- Target Live Firebase Functions ---
+# --- Emulator/Live Configuration ---
+USE_EMULATOR = False # Set to False to target live functions
+ROW_LIMIT_FOR_TESTING = None # Use a small number for quick emulator testing. Set to None for full run.
+
+PROJECT_ID = "theneuron-ac757"
+REGION = "us-central1"
+
 LIVE_FUNCTIONS_HOST = "us-central1-theneuron-ac757.cloudfunctions.net"
-# The script uses HTTP POST, so these are paths for HTTP functions.
-# The createPatientHttp function was designed for this script.
-CREATE_PATIENT_FUNCTION_PATH = "/createPatientHttp"
-ADD_HISTORICAL_VISIT_FUNCTION_PATH = "/addHistoricalVisit"
-SET_PATIENT_COUNTER_FUNCTION_PATH = "/setPatientCounter" # New path
+EMULATOR_FUNCTIONS_HOST = "localhost:5002" # Functions emulator port
+
+TARGET_HOST = EMULATOR_FUNCTIONS_HOST if USE_EMULATOR else LIVE_FUNCTIONS_HOST
+CONNECTION_TYPE = http.client.HTTPConnection if USE_EMULATOR else http.client.HTTPSConnection
+
+# Function paths (base names)
+CREATE_PATIENT_FUNCTION_BASE_PATH = "/createPatientHttp"
+ADD_HISTORICAL_VISIT_FUNCTION_BASE_PATH = "/addHistoricalVisit" # For batch, the CF is addHistoricalVisitBatch
+SET_PATIENT_COUNTER_FUNCTION_BASE_PATH = "/setPatientCounter"
+
+# Construct full paths based on environment
+def get_full_path(base_path):
+    if USE_EMULATOR:
+        return f"/{PROJECT_ID}/{REGION}{base_path}"
+    return base_path
+
+CREATE_PATIENT_FUNCTION_PATH = get_full_path(CREATE_PATIENT_FUNCTION_BASE_PATH)
+# The Python script's addHistoricalVisit path should point to the batch function addHistoricalVisitBatch
+ADD_HISTORICAL_VISIT_FUNCTION_PATH = get_full_path("/addHistoricalVisitBatch") 
+SET_PATIENT_COUNTER_FUNCTION_PATH = get_full_path(SET_PATIENT_COUNTER_FUNCTION_BASE_PATH)
+
 
 BATCH_SIZE = 50
 
@@ -23,7 +46,8 @@ def send_batch_request(conn, host, path, payload_key, batch_data, headers):
     # print(f"Sending batch of {len(batch_data)} to {path}. Payload size: {len(json_payload)} bytes")
     try:
         if conn is None:
-            conn = http.client.HTTPSConnection(host, timeout=60) # Increased timeout for larger batches
+            # Use CONNECTION_TYPE which is set based on USE_EMULATOR
+            conn = CONNECTION_TYPE(host, timeout=60) 
         
         conn.request("POST", path, json_payload, headers)
         response = conn.getresponse()
@@ -31,7 +55,7 @@ def send_batch_request(conn, host, path, payload_key, batch_data, headers):
         response.close()
         return response.status, response_body, conn
     except http.client.HTTPException as e:
-        print(f"HTTP ERROR sending batch to {path}: {e}")
+        print(f"HTTP ERROR sending batch to {host}{path}: {e}")
         if conn: conn.close()
         return None, None, None # Indicate connection needs reset
     except ConnectionRefusedError as e:
@@ -39,7 +63,7 @@ def send_batch_request(conn, host, path, payload_key, batch_data, headers):
         if conn: conn.close()
         return "CONN_REFUSED", None, None
     except Exception as e:
-        print(f"GENERAL ERROR sending batch to {path}: {e}")
+        print(f"GENERAL ERROR sending batch to {host}{path}: {e}")
         if conn: conn.close()
         return None, None, None
 
@@ -54,7 +78,7 @@ def update_pReg_counter_in_firestore(max_preg_number):
     payload = json.dumps({"lastPRegNumber": max_preg_number})
 
     try:
-        conn = http.client.HTTPSConnection(LIVE_FUNCTIONS_HOST, timeout=30)
+        conn = CONNECTION_TYPE(TARGET_HOST, timeout=30)
         conn.request("POST", SET_PATIENT_COUNTER_FUNCTION_PATH, payload, headers)
         response = conn.getresponse()
         response_body = response.read().decode()
@@ -67,7 +91,7 @@ def update_pReg_counter_in_firestore(max_preg_number):
     except http.client.HTTPException as e:
         print(f"HTTP ERROR updating patient counter: {e}")
     except ConnectionRefusedError as e:
-        print(f"FATAL: Connection Refused for {LIVE_FUNCTIONS_HOST}{SET_PATIENT_COUNTER_FUNCTION_PATH}. Error: {e}")
+        print(f"FATAL: Connection Refused for {TARGET_HOST}{SET_PATIENT_COUNTER_FUNCTION_PATH}. Error: {e}")
     except Exception as e:
         print(f"GENERAL ERROR updating patient counter: {e}")
     finally:
@@ -82,7 +106,7 @@ def import_patients():
     max_preg_val_from_csv = 0 # To store the highest PReg number
 
     print(f"Starting patient import from: {CSV_FILE_PATH}")
-    print(f"Targeting Patient Creation Cloud Function (batch) at: https://{LIVE_FUNCTIONS_HOST}{CREATE_PATIENT_FUNCTION_PATH}")
+    print(f"Targeting Patient Creation Cloud Function (batch) at: http{'s' if not USE_EMULATOR else ''}://{TARGET_HOST}{CREATE_PATIENT_FUNCTION_PATH}")
     print(f"Using BATCH_SIZE: {BATCH_SIZE}")
 
     patient_batch = []
@@ -97,6 +121,10 @@ def import_patients():
                 return
 
             for row_index, row in enumerate(reader):
+                if ROW_LIMIT_FOR_TESTING and row_index >= ROW_LIMIT_FOR_TESTING:
+                    print(f"Reached testing row limit of {ROW_LIMIT_FOR_TESTING}. Stopping patient demographic import.")
+                    break
+
                 preg = row.get('PReg', '').strip()
                 if not preg:
                     continue # Skip rows with no PReg
@@ -143,7 +171,7 @@ def import_patients():
 
                 if len(patient_batch) >= BATCH_SIZE:
                     print(f"Sending batch of {len(patient_batch)} patients (Total processed so far: {patients_processed_count})...")
-                    status, body, conn = send_batch_request(conn, LIVE_FUNCTIONS_HOST, CREATE_PATIENT_FUNCTION_PATH, "patients", patient_batch, headers)
+                    status, body, conn = send_batch_request(conn, TARGET_HOST, CREATE_PATIENT_FUNCTION_PATH, "patients", patient_batch, headers)
                     if status == "CONN_REFUSED": return
                     if status and (status == 201 or status == 207): # 201 all created, 207 mixed results
                         try:
@@ -165,7 +193,7 @@ def import_patients():
             # Send any remaining patients
             if patient_batch:
                 print(f"Sending final batch of {len(patient_batch)} patients...")
-                status, body, conn = send_batch_request(conn, LIVE_FUNCTIONS_HOST, CREATE_PATIENT_FUNCTION_PATH, "patients", patient_batch, headers)
+                status, body, conn = send_batch_request(conn, TARGET_HOST, CREATE_PATIENT_FUNCTION_PATH, "patients", patient_batch, headers)
                 if status == "CONN_REFUSED": return
                 if status and (status == 201 or status == 207):
                     try:
@@ -208,7 +236,7 @@ def import_patients():
 
 def import_historical_visits():
     print("\n--- Starting Historical Visit Import ---BATCH MODE---")
-    print(f"Targeting Add Historical Visit Cloud Function (batch) at: https://{LIVE_FUNCTIONS_HOST}{ADD_HISTORICAL_VISIT_FUNCTION_PATH}")
+    print(f"Targeting Add Historical Visit Cloud Function (batch) at: http{'s' if not USE_EMULATOR else ''}://{TARGET_HOST}{ADD_HISTORICAL_VISIT_FUNCTION_PATH}")
     print(f"Using BATCH_SIZE: {BATCH_SIZE}")
 
     visits_to_process_map = defaultdict(lambda: {"details": None, "medications": []})
@@ -218,8 +246,15 @@ def import_historical_visits():
             reader = csv.DictReader(csvfile)
             if not reader.fieldnames: return
             all_csv_rows = list(reader)
+            if ROW_LIMIT_FOR_TESTING:
+                print(f"Applying row limit: processing first {ROW_LIMIT_FOR_TESTING} rows of CSV for visits.")
+                all_csv_rows = all_csv_rows[:ROW_LIMIT_FOR_TESTING]
     except FileNotFoundError:
         print(f"FATAL Error: CSV file not found at {CSV_FILE_PATH} for visit import.")
+        # This part of the code seems to have a bug with undefined variables.
+        # It's inside an exception handler, so it might not be critical right now.
+        # print(f"Total visits processed: {total_visits_processed}, Batches sent: {batches_sent}")
+        # print(f"Success count: {total_success_count}, Failure count: {total_failure_count}")
         return
     except Exception as e: return print(f"Error reading CSV for visits: {e}")
 
@@ -227,18 +262,46 @@ def import_historical_visits():
 
     for row in all_csv_rows:
         preg = row.get('PReg', '').strip()
-        visit_date_str = row.get('Date', '').strip() # This is like "24:35.0"
+        visit_date_str = row.get('Date', '').strip() # Original format DD/MM/YYYY
+        amount_charged_str = row.get('tAmount', '0').strip() # Get tAmount, default to '0'
+
         if not preg or not visit_date_str: continue
-        visit_key = (preg, visit_date_str)
+
+        # Parse date
+        parsed_date_iso = ""
+        try:
+            # Assuming date is DD/MM/YYYY. Convert to YYYY-MM-DD for Firestore.
+            dt_object = datetime.strptime(visit_date_str, '%d/%m/%Y')
+            parsed_date_iso = dt_object.strftime('%Y-%m-%d')
+        except ValueError:
+            print(f"CRITICAL: Could not parse date '{visit_date_str}' for PReg {preg}. SKIPPING this visit record entirely.")
+            # Skip this entire record by continuing to the next loop iteration
+            continue
+
+        # Parse amount_charged
+        amount_charged = 0
+        if amount_charged_str:
+            try:
+                # Handle potential commas in thousands, e.g., "2,000" -> 2000
+                amount_charged = int(float(amount_charged_str.replace(',', '')))
+            except ValueError:
+                print(f"Warning: Could not parse tAmount '{amount_charged_str}' for PReg {preg}, visit date {visit_date_str}. Using 0.")
+                amount_charged = 0
+        
+        # Use original visit_date_str for visit_key to maintain uniqueness if multiple entries exist for same actual date before parsing
+        visit_key = (preg, visit_date_str) 
+
         if visits_to_process_map[visit_key]["details"] is None:
             visits_to_process_map[visit_key]["details"] = {
-                "visitDate": visit_date_str, 
+                "visitDate": parsed_date_iso, # Store parsed date
                 "complaints": row.get('Complain', '').strip(),
                 "examination": row.get('Examination', '').strip(),
                 "diagnosis": row.get('Diagnose', '').strip(),
                 "investigation": row.get('Investigation', '').strip(),
                 "advise": row.get('Advise', '').strip(),
                 "nextPlan": row.get('NextPlan', '').strip(),
+                "amountCharged": amount_charged, # Add amount charged
+                "originalCsvDate": visit_date_str # Keep original date for reference if needed
             }
         med_name = row.get('MName', '').strip()
         if med_name: 
@@ -272,7 +335,7 @@ def import_historical_visits():
 
         if len(visit_batch) >= BATCH_SIZE:
             print(f"Sending batch of {len(visit_batch)} visits (Total visits processed so far: {total_visits_processed_in_batches})...")
-            status, body, conn = send_batch_request(conn, LIVE_FUNCTIONS_HOST, ADD_HISTORICAL_VISIT_FUNCTION_PATH, "visits", visit_batch, headers)
+            status, body, conn = send_batch_request(conn, TARGET_HOST, ADD_HISTORICAL_VISIT_FUNCTION_PATH, "visits", visit_batch, headers)
             if status == "CONN_REFUSED": return
             if status and (status == 201 or status == 207):
                 try:
@@ -293,7 +356,7 @@ def import_historical_visits():
     # Send any remaining visits
     if visit_batch:
         print(f"Sending final batch of {len(visit_batch)} visits...")
-        status, body, conn = send_batch_request(conn, LIVE_FUNCTIONS_HOST, ADD_HISTORICAL_VISIT_FUNCTION_PATH, "visits", visit_batch, headers)
+        status, body, conn = send_batch_request(conn, TARGET_HOST, ADD_HISTORICAL_VISIT_FUNCTION_PATH, "visits", visit_batch, headers)
         if status == "CONN_REFUSED": return
         if status and (status == 201 or status == 207):
             try:
@@ -322,38 +385,14 @@ def import_historical_visits():
             print(f"  - PReg: {failure.get('patientId', 'N/A')}, VisitDate: {failure.get('visitDate', failure.get('item',{}).get('visitData',{}).get('visitDate','N/A'))}, Reason: {failure.get('error', failure.get('reason', 'Unknown'))}")
 
 if __name__ == "__main__":
-    # import_patients()  # Uncomment to run patient demographic import
-    # import_historical_visits() # Uncomment to run historical visit import
-    
-    # --- For one-time counter update ---
-    # You can manually set the known max PReg here if you don't want to re-parse the CSV
-    # For example, if you know the max imported PReg was PR-5844:
-    # update_pReg_counter_in_firestore(5844) 
-    
-    # Or, to calculate from CSV and then update (if script is run standalone for this purpose):
-    # print("Calculating max PReg from CSV to update counter...")
-    # temp_max_preg = 0
-    # try:
-    #     with open(CSV_FILE_PATH, mode='r', encoding='utf-8-sig') as csvfile:
-    #         reader = csv.DictReader(csvfile)
-    #         if reader.fieldnames:
-    #             for row in reader:
-    #                 preg_str = row.get('PReg', '').strip()
-    #                 match = re.match(r"PR-(\d+)", preg_str, re.IGNORECASE)
-    #                 if match:
-    #                     preg_num = int(match.group(1))
-    #                     if preg_num > temp_max_preg:
-    #                         temp_max_preg = preg_num
-    #                 elif preg_str.isdigit(): # Check if it's just a number
-    #                      preg_num_int = int(preg_str)
-    #                      if preg_num_int > temp_max_preg:
-    #                         temp_max_preg = preg_num_int
-    #     if temp_max_preg > 0:
-    #         update_pReg_counter_in_firestore(temp_max_preg)
-    #     else:
-    #         print("Could not determine max PReg from CSV for standalone counter update.")
-    # except FileNotFoundError:
-    #     print(f"CSV file not found at {CSV_FILE_PATH} for standalone counter update.")
-    # except Exception as e:
-    #     print(f"Error during standalone counter update: {e}")
+    # To run a full import (demographics first, then visits):
+    # 1. Ensure USE_EMULATOR is set correctly at the top of the script.
+    # 2. Uncomment the function calls below.
+
+    # Step 1: Import patient demographic data. This also sets the PReg counter.
+    import_patients()
+
+    # Step 2: Import all historical visits for the patients.
+    import_historical_visits()
+
     print("\nScript finished. Uncomment calls in __main__ to perform actions.")

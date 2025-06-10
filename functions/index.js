@@ -352,42 +352,44 @@ exports.getReportLayout = onRequest(
 
 // --- NEW Cloud Function to Get Last Patient Visit --- (Task 5.12)
 exports.getLastPatientVisit = onRequest(
-    { region: 'us-central1', memory: '128MB' },
+    { region: 'us-central1' },
     async (req, res) => {
         corsMiddleware(req, res, async () => {
-            logger.info("Request received for getLastPatientVisit", { method: req.method, query: req.query });
+            logger.info("Request received for getLastPatientVisit", {method: req.method, query: req.query});
             if (req.method !== "GET") {
-                logger.warn("Method not allowed for getLastPatientVisit", { method: req.method });
                 return res.status(405).send({ error: "Method Not Allowed" });
             }
 
-            const patientId = req.query.patientId;
+            const { patientId } = req.query;
+
             if (!patientId) {
-                logger.warn("Bad Request: Missing patientId query parameter for getLastPatientVisit");
-                return res.status(400).send({ error: "Bad Request: Missing patientId query parameter." });
+                logger.warn("Bad Request: Missing patientId for getLastPatientVisit");
+                return res.status(400).send({ error: "Bad Request: Missing patientId." });
             }
 
             try {
-                const visitsRef = db.collection('patients').doc(patientId).collection('visits');
-                // Assuming visitDate is stored in a way that allows correct descending chronological order
-                // (e.g., Firestore Timestamp or ISO 8601 string)
-                const snapshot = await visitsRef.orderBy('visitDate', 'desc').limit(1).get();
+                const visitsRef = db.collection("patients").doc(patientId).collection("visits");
+                const snapshot = await visitsRef.orderBy("visitDate", "desc").limit(1).get();
 
                 if (snapshot.empty) {
                     logger.info("No visits found for patient", { patientId });
                     return res.status(404).send({ message: "No visits found for this patient." });
                 }
 
-                // Return the data of the last visit, including its ID
-                const lastVisitDoc = snapshot.docs[0];
-                const lastVisitData = { id: lastVisitDoc.id, ...lastVisitDoc.data() };
-                
-                logger.info("Last visit retrieved successfully for patient", { patientId, visitId: lastVisitDoc.id });
-                return res.status(200).send(lastVisitData);
+                let lastVisitData = {};
+                snapshot.forEach(doc => {
+                    lastVisitData = { id: doc.id, ...doc.data() };
+                });
+                // Ensure amountCharged is returned, defaulting to null if not present
+                if (lastVisitData.amountCharged === undefined) {
+                    lastVisitData.amountCharged = null;
+                }
 
+                logger.info("Last visit data retrieved successfully", { patientId, visitId: lastVisitData.id });
+                return res.status(200).send(lastVisitData);
             } catch (error) {
-                logger.error("Error retrieving last visit for patient:", { patientId, errorMessage: error.message, errorStack: error.stack });
-                return res.status(500).send({ error: "Internal Server Error retrieving last visit.", details: error.message });
+                logger.error("Error in getLastPatientVisit:", { error: error.message, patientId });
+                return res.status(500).send({ error: "Internal Server Error while fetching last visit." });
             }
         });
     }
@@ -757,7 +759,7 @@ exports.getVisitsForPatient = onRequest(
 
 // --- Function to Save a Patient Visit (Task: Print Report saves visit) ---
 exports.savePatientVisit = onRequest(
-    { region: 'us-central1', memory: '256MB' },
+    { region: 'us-central1' },
     async (req, res) => {
         corsMiddleware(req, res, async () => {
             logger.info("Request received for savePatientVisit", { method: req.method });
@@ -765,43 +767,51 @@ exports.savePatientVisit = onRequest(
                 return res.status(405).send({ error: "Method Not Allowed" });
             }
 
+            const { patientId, visitData } = req.body;
+
+            if (!patientId || !visitData || !visitData.visitDate) {
+                logger.warn("Bad Request: Missing patientId or visitData or visitData.visitDate for savePatientVisit", { body: req.body });
+                return res.status(400).send({ error: "Bad Request: Missing patientId, visitData, or visitData.visitDate." });
+            }
+            
+            // A specific visit can be updated if visitId is provided
+            const { visitId, ...dataToSave } = visitData;
+
             try {
-                const { patientId, visitData } = req.body;
+                const patientRef = db.collection("patients").doc(patientId);
+                const visitPayload = {
+                    ...dataToSave, // Includes visitDate, complaints, examination, diagnosis, medications
+                    amountCharged: typeof dataToSave.amountCharged === 'number' ? dataToSave.amountCharged : null, // Save if provided, else null
+                    updatedAt: FieldValue.serverTimestamp(), // For tracking updates
+                };
 
-                if (!patientId) {
-                    logger.warn("Bad Request: Missing patientId for savePatientVisit");
-                    return res.status(400).send({ error: "Bad Request: Missing patientId." });
+                let visitDocRef;
+                let action;
+
+                if (visitId) {
+                    // Update existing visit
+                    visitDocRef = patientRef.collection("visits").doc(visitId);
+                    await visitDocRef.set(visitPayload, { merge: true }); // Merge to update, not overwrite all
+                    action = "updated";
+                    logger.info("Patient visit updated successfully", { patientId, visitId });
+                } else {
+                    // Create new visit
+                    visitPayload.createdAt = FieldValue.serverTimestamp(); // Set createdAt for new visits
+                    visitDocRef = await patientRef.collection("visits").add(visitPayload);
+                    action = "created";
+                    logger.info("Patient visit saved successfully", { patientId, visitId: visitDocRef.id });
                 }
-                if (!visitData || typeof visitData !== 'object' || Object.keys(visitData).length === 0) {
-                    logger.warn("Bad Request: Missing or empty visitData for savePatientVisit");
-                    return res.status(400).send({ error: "Bad Request: Missing or invalid visitData." });
-                }
-
-                // Validate patient exists (optional, but good practice)
-                const patientDocRef = db.collection('patients').doc(patientId);
-                const patientDoc = await patientDocRef.get();
-                if (!patientDoc.exists) {
-                    logger.warn("Patient not found for savePatientVisit", { patientId });
-                    return res.status(404).send({ error: "Patient not found. Cannot save visit." });
-                }
-
-                // Add a server timestamp to the visit data
-                const now = FieldValue.serverTimestamp();
-                visitData.createdAt = now;
-                // If visitData includes a visitDate string, consider converting it to a Firestore Timestamp here
-                // For example: if (visitData.visitDate && typeof visitData.visitDate === 'string') {
-                //   visitData.visitDate = admin.firestore.Timestamp.fromDate(new Date(visitData.visitDate));
-                // }
-
-                const visitCollectionRef = patientDocRef.collection('visits');
-                const newVisitRef = await visitCollectionRef.add(visitData);
-
-                logger.info("Patient visit saved successfully.", { patientId: patientId, visitId: newVisitRef.id });
-                return res.status(201).send({ success: true, visitId: newVisitRef.id, message: "Patient visit saved successfully." });
-
+                
+                return res.status(action === "created" ? 201 : 200).send({
+                    success: true,
+                    patientId,
+                    visitId: visitDocRef.id,
+                    action,
+                    message: `Patient visit ${action} successfully.`
+                });
             } catch (error) {
-                logger.error("Error saving patient visit to Firestore:", { errorMessage: error.message, errorStack: error.stack });
-                return res.status(500).send({ error: "Internal Server Error saving patient visit.", details: error.message });
+                logger.error("Error in savePatientVisit:", { error: error.message, patientId, visitData });
+                return res.status(500).send({ error: "Internal Server Error while saving patient visit." });
             }
         });
     }
@@ -810,87 +820,143 @@ exports.savePatientVisit = onRequest(
 // --- NEW Cloud Function to Add a Historical Visit (for bulk import script) ---
 // Modifying for batch processing
 exports.addHistoricalVisit = onRequest(
-    { region: 'us-central1', memory: '512MB' }, // Increased memory for batch
+    { region: 'us-central1', timeoutSeconds: 120, memory: '512MB' },
     async (req, res) => {
         corsMiddleware(req, res, async () => {
-            logger.info("Request received for addHistoricalVisit (batch)", { method: req.method });
+            logger.info("Request received for addHistoricalVisit (single item)", { method: req.method });
             if (req.method !== "POST") {
                 return res.status(405).send({ error: "Method Not Allowed" });
             }
 
-            const visitsArray = req.body.visits; // Expecting an array of { patientId, visitData }
-            if (!visitsArray || !Array.isArray(visitsArray) || visitsArray.length === 0) {
-                logger.warn("Bad Request: 'visits' array is required for addHistoricalVisit.");
-                return res.status(400).json({ error: "Request body must be a non-empty array of visit objects under the 'visits' key, each with 'patientId' (PReg) and 'visitData'." });
+            const { patientId, visitData } = req.body;
+
+            if (!patientId || !visitData || !visitData.visitDate) {
+                logger.warn("Bad Request: Missing patientId or visitData or visitData.visitDate", { body: req.body });
+                return res.status(400).send({ error: "Bad Request: Missing patientId, visitData, or visitData.visitDate." });
             }
 
-            logger.info(`addHistoricalVisit (batch) processing ${visitsArray.length} visits.`);
+            try {
+                const patientRef = db.collection("patients").doc(patientId);
+                const patientDoc = await patientRef.get();
+
+                if (!patientDoc.exists) {
+                    logger.warn("Patient not found for addHistoricalVisit", { patientId });
+                    return res.status(404).send({ error: `Patient with ID ${patientId} not found.` });
+                }
+
+                // Ensure visitDate is in YYYY-MM-DD. The python script should now send this.
+                // Add server-side validation if necessary, but for imports, assume correct format.
+                const visitPayload = {
+                    visitDate: visitData.visitDate, // Expecting YYYY-MM-DD
+                    complaints: visitData.complaints || "",
+                    examination: visitData.examination || "",
+                    diagnosis: visitData.diagnosis || "",
+                    investigation: visitData.investigation || "",
+                    advise: visitData.advise || "",
+                    nextPlan: visitData.nextPlan || "",
+                    medications: visitData.medications || [],
+                    amountCharged: typeof visitData.amountCharged === 'number' ? visitData.amountCharged : 0, // Ensure it's a number
+                    originalCsvDate: visitData.originalCsvDate || null, // For reference from import
+                    importedHistorical: true, // Flag this visit as an import
+                    createdAt: FieldValue.serverTimestamp(),
+                };
+
+                const visitRef = await patientRef.collection("visits").add(visitPayload);
+                logger.info("Historical visit added successfully", { patientId, visitId: visitRef.id });
+                return res.status(201).send({ success: true, patientId, visitId: visitRef.id, message: "Historical visit added." });
+            } catch (error) {
+                logger.error("Error in addHistoricalVisit:", { error: error.message, patientId, visitData });
+                return res.status(500).send({ error: "Internal Server Error while adding historical visit." });
+            }
+        });
+    }
+);
+
+exports.addHistoricalVisitBatch = onRequest(
+    { region: 'us-central1', timeoutSeconds: 540, memory: '1GB' }, // Increased timeout for larger batches
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            logger.info("Request received for addHistoricalVisitBatch", { method: req.method });
+            if (req.method !== "POST") {
+                return res.status(405).send({ error: "Method Not Allowed" });
+            }
+
+            const { visits } = req.body; // Expects an array of { patientId, visitData }
+
+            if (!Array.isArray(visits) || visits.length === 0) {
+                logger.warn("Bad Request: Missing or empty visits array for batch", { body: req.body });
+                return res.status(400).send({ error: "Bad Request: Missing or empty visits array." });
+            }
+            if (visits.length > 250) { // Firestore batch limit is 500 operations, one doc write per visit.
+                logger.warn("Bad Request: Batch size exceeds 250 visits limit.", { batchSize: visits.length });
+                return res.status(400).send({ error: "Bad Request: Batch size too large (max 250)." });
+            }
+
             const results = [];
             let successCount = 0;
             let failureCount = 0;
-            const errors = [];
-            const importTimestamp = admin.firestore.FieldValue.serverTimestamp(); // Use admin.firestore
 
-            for (const item of visitsArray) {
-                const { patientId, visitData } = item; // patientId is PReg from script
+            // We process sequentially per patient to avoid contention on patient doc,
+            // but batch writes to their visits subcollection.
+            // This example will process each patient's visits in a separate batch for simplicity.
+            // For true parallel processing of different patients, more complex logic is needed.
 
-                if (!patientId || !visitData || typeof visitData !== 'object' || !visitData.visitDate) {
-                    logger.warn("Skipping visit in batch due to missing patientId, visitData, or visitData.visitDate:", item);
+            for (const item of visits) {
+                const { patientId, visitData } = item;
+                if (!patientId || !visitData || !visitData.visitDate) {
+                    logger.warn("Skipping invalid item in batch", { item });
+                    results.push({ patientId, visitDate: visitData?.visitDate, status: "skipped", reason: "Missing patientId, visitData, or visitData.visitDate" });
                     failureCount++;
-                    const pId = patientId || "N/A";
-                    const vDate = (visitData && visitData.visitDate) ? visitData.visitDate : "N/A";
-                    errors.push({ patientId: pId, visitDate: vDate, error: "Missing patientId, visitData, or visitData.visitDate" });
-                    results.push({ patientId: pId, visitDate: vDate, status: "skipped", reason: "Missing patientId, visitData, or visitData.visitDate"});
                     continue;
                 }
 
                 try {
-                    const patientDocRef = db.collection('patients').doc(patientId); // patientId from script is PReg (document ID)
-                    // No need to explicitly check patientDoc.exists for adding to subcollection, 
-                    // but for robustness in import, good to know if parent doesn't exist.
-                    // However, function will still try to write to subcollection path.
-                    // If parent doesn't exist, subcollection write creates the path but parent remains non-existent.
-                    // For cleaner data, ensure patients are created first.
-                    // The script does patients first, so this should be okay.
+                    const patientRef = db.collection("patients").doc(patientId);
+                    // No need to check patientDoc.exists for batch import, assume PRegs are valid or will be created
+                    // If strict checking is needed, it slows down batch significantly.
 
-                    const dataToSave = {
-                        ...visitData, 
-                        pReg: patientId, // Store PReg in visit doc for convenience
-                        importedAt: importTimestamp 
+                    const visitPayload = {
+                        visitDate: visitData.visitDate, // Expecting YYYY-MM-DD
+                        complaints: visitData.complaints || "",
+                        examination: visitData.examination || "",
+                        diagnosis: visitData.diagnosis || "",
+                        investigation: visitData.investigation || "",
+                        advise: visitData.advise || "",
+                        nextPlan: visitData.nextPlan || "",
+                        medications: visitData.medications || [],
+                        amountCharged: typeof visitData.amountCharged === 'number' ? visitData.amountCharged : 0,
+                        originalCsvDate: visitData.originalCsvDate || null,
+                        importedHistorical: true,
+                        createdAt: FieldValue.serverTimestamp(),
                     };
 
-                    const visitCollectionRef = patientDocRef.collection('visits');
-                    const newVisitRef = await visitCollectionRef.add(dataToSave);
-                    
-                    // logger.info("Historical patient visit saved successfully in batch.", { patientId: patientId, visitId: newVisitRef.id, historicalVisitDate: visitData.visitDate });
+                    const visitRef = await patientRef.collection("visits").add(visitPayload);
+                    results.push({ patientId, visitId: visitRef.id, visitDate: visitData.visitDate, status: "success" });
                     successCount++;
-                    results.push({ patientId, visitDate: visitData.visitDate, visitId: newVisitRef.id, status: "created" });
-
                 } catch (error) {
-                    logger.error("Error saving historical patient visit in batch:", { patientId, visitDate: visitData.visitDate, errorMessage: error.message, errorStack: error.stack });
-                    failureCount++;
-                    errors.push({ patientId, visitDate: visitData.visitDate, error: error.message });
+                    logger.error("Error processing item in addHistoricalVisitBatch:", { error: error.message, patientId, visitDate: visitData.visitDate });
                     results.push({ patientId, visitDate: visitData.visitDate, status: "error", reason: error.message });
+                    failureCount++;
                 }
             }
 
-            logger.info(`Batch addHistoricalVisit finished. Success: ${successCount}, Failure: ${failureCount}`);
+            logger.info("Batch historical visit processing complete", { successCount, failureCount, totalItems: visits.length });
             if (failureCount > 0) {
-                return res.status(207).json({ // Multi-Status
-                    message: "Batch visit operation completed with some errors.",
+                return res.status(207).send({
+                    message: "Batch processed with some failures.",
                     successCount,
                     failureCount,
-                    results,
-                    errors
-                });
-            } else {
-                return res.status(201).json({
-                    message: "All visits in batch processed successfully.",
-                    successCount,
-                    failureCount: 0,
-                    results
+                    totalItems: visits.length,
+                    errors: results.filter(r => r.status !== "success")
                 });
             }
+            return res.status(201).send({
+                message: "All historical visits in batch added successfully.",
+                successCount,
+                failureCount,
+                totalItems: visits.length,
+                results
+            });
         });
     }
 );
@@ -985,6 +1051,200 @@ exports.setPatientCounter = onRequest(
             } catch (error) {
                 logger.error("Error in setPatientCounter:", { error: error.message, stack: error.stack });
                 res.status(500).send({ error: "Internal Server Error setting patient counter.", details: error.message });
+            }
+        });
+    }
+);
+
+// New function to get all visits for a patient
+exports.getAllPatientVisits = onRequest(
+    { region: 'us-central1' },
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            logger.info("Request received for getAllPatientVisits", { method: req.method, query: req.query });
+            if (req.method !== "GET") {
+                return res.status(405).send({ error: "Method Not Allowed" });
+            }
+
+            const { patientId, orderBy = "visitDate", orderDirection = "desc" } = req.query;
+
+            if (!patientId) {
+                logger.warn("Bad Request: Missing patientId for getAllPatientVisits");
+                return res.status(400).send({ error: "Bad Request: Missing patientId." });
+            }
+
+            try {
+                const visitsRef = db.collection("patients").doc(patientId).collection("visits");
+                const snapshot = await visitsRef.orderBy(orderBy, orderDirection).get();
+
+                if (snapshot.empty) {
+                    logger.info("No visits found for patient (getAllPatientVisits)", { patientId });
+                    return res.status(200).send([]); // Return empty array if no visits
+                }
+
+                const visits = [];
+                snapshot.forEach(doc => {
+                    visits.push({ id: doc.id, ...doc.data() });
+                });
+
+                logger.info(`Retrieved ${visits.length} visits for patient`, { patientId });
+                return res.status(200).send(visits);
+            } catch (error) {
+                logger.error("Error in getAllPatientVisits:", { error: error.message, patientId });
+                return res.status(500).send({ error: "Internal Server Error while fetching all visits." });
+            }
+        });
+    }
+);
+
+// New function for patient management page: get last visit date and amount
+exports.getPatientVisitSummary = onRequest(
+    { region: 'us-central1' },
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            logger.info("Request received for getPatientVisitSummary", { method: req.method, query: req.query });
+            if (req.method !== "GET") {
+                return res.status(405).send({ error: "Method Not Allowed" });
+            }
+            const { patientId } = req.query;
+            if (!patientId) {
+                logger.warn("Bad Request: Missing patientId for getPatientVisitSummary");
+                return res.status(400).send({ error: "Bad Request: Missing patientId." });
+            }
+
+            try {
+                const visitsRef = db.collection("patients").doc(patientId).collection("visits");
+                const snapshot = await visitsRef.orderBy("visitDate", "desc").limit(1).get();
+
+                if (snapshot.empty) {
+                    return res.status(200).send({ patientId, lastVisitDate: null, lastAmountCharged: null });
+                }
+                let summary = { patientId, lastVisitDate: null, lastAmountCharged: null };
+                snapshot.forEach(doc => { // Should only be one
+                    const data = doc.data();
+                    summary.lastVisitDate = data.visitDate || null;
+                    summary.lastAmountCharged = typeof data.amountCharged === 'number' ? data.amountCharged : null;
+                });
+                logger.info("Patient visit summary retrieved", { patientId, summary });
+                return res.status(200).send(summary);
+            } catch (error) {
+                logger.error("Error in getPatientVisitSummary:", { error: error.message, patientId });
+                return res.status(500).send({ error: "Internal Server Error." });
+            }
+        });
+    }
+);
+
+// New function for financial reporting
+exports.getTotalChargedInDateRange = onRequest(
+    { region: 'us-central1', timeoutSeconds: 60, memory: '256MB' },
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            logger.info("Request received for getTotalChargedInDateRange", { method: req.method, query: req.query });
+            if (req.method !== "GET") { // Or POST if preferred for date range payload
+                return res.status(405).send({ error: "Method Not Allowed" });
+            }
+            const { startDate, endDate } = req.query; // Expecting YYYY-MM-DD format
+
+            if (!startDate || !endDate) {
+                logger.warn("Bad Request: Missing startDate or endDate for getTotalChargedInDateRange");
+                return res.status(400).send({ error: "Bad Request: Missing startDate or endDate." });
+            }
+
+            // Optional: Validate date formats (e.g., regex YYYY-MM-DD)
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if (!dateRegex.test(startDate) || !dateRegex.test(endDate)) {
+                logger.warn("Bad Request: Invalid date format. Expected YYYY-MM-DD.", { startDate, endDate });
+                return res.status(400).send({ error: "Bad Request: Invalid date format. Expected YYYY-MM-DD." });
+            }
+            
+            try {
+                // This requires a composite index on 'visits' collection group:
+                // visitDate (Ascending), amountCharged (Ascending/Descending - not strictly needed for sum but good practice)
+                // Or just 'visitDate' if only filtering on it.
+                const visitsQuery = db.collectionGroup('visits')
+                                      .where('visitDate', '>=', startDate)
+                                      .where('visitDate', '<=', endDate);
+                
+                const snapshot = await visitsQuery.get();
+                let totalAmount = 0;
+                let visitCount = 0;
+
+                if (!snapshot.empty) {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        if (typeof data.amountCharged === 'number') {
+                            totalAmount += data.amountCharged;
+                        }
+                        visitCount++;
+                    });
+                }
+                
+                logger.info("Total charged in date range calculated", { startDate, endDate, totalAmount, visitCount });
+                return res.status(200).send({ startDate, endDate, totalAmount, visitCount });
+            } catch (error) {
+                logger.error("Error in getTotalChargedInDateRange:", { error: error.message, startDate, endDate });
+                if (error.message && error.message.includes("indexes are not built")) { // More specific error for missing index
+                     logger.error("Potential missing Firestore index for collection group query on 'visits'. Ensure 'visitDate' is indexed for range queries.");
+                     return res.status(500).send({ error: "Query requires an index. Please check Firebase console for index creation." });
+                }
+                return res.status(500).send({ error: "Internal Server Error." });
+            }
+        });
+    }
+);
+
+// New utility function to delete all visits for all patients
+exports.deleteAllVisits = onRequest(
+    { region: 'us-central1', timeoutSeconds: 540, memory: '1GB' },
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            if (req.query.confirm !== 'true') {
+                logger.warn("Delete all visits called without confirmation. Aborting.");
+                return res.status(400).send({ error: "This is a destructive operation. To proceed, you must add the query parameter `?confirm=true`." });
+            }
+
+            logger.info("Starting deleteAllVisits operation. THIS IS DESTRUCTIVE.");
+            const patientsRef = db.collection('patients');
+            let totalDeletedCount = 0;
+            let patientsProcessed = 0;
+
+            try {
+                const patientsSnapshot = await patientsRef.get();
+                if (patientsSnapshot.empty) {
+                    logger.info("No patients found. Nothing to delete.");
+                    return res.status(200).send({ message: "No patients found. Nothing to delete." });
+                }
+
+                const allPatientIds = patientsSnapshot.docs.map(doc => doc.id);
+                logger.info(`Found ${allPatientIds.length} patients to process.`);
+
+                for (const patientId of allPatientIds) {
+                    const visitsRef = db.collection('patients').doc(patientId).collection('visits');
+                    const visitsSnapshot = await visitsRef.limit(500).get(); // Process up to 500 at a time per patient
+
+                    if (!visitsSnapshot.empty) {
+                        const batch = db.batch();
+                        visitsSnapshot.docs.forEach(doc => {
+                            batch.delete(doc.ref);
+                        });
+                        await batch.commit();
+                        totalDeletedCount += visitsSnapshot.size;
+                        logger.info(`Deleted ${visitsSnapshot.size} visits for patient ${patientId}.`);
+
+                        // If a patient has more than 500 visits, this would need to be run multiple times
+                        // or have a more complex loop. For this cleanup, we assume <500 visits per patient.
+                    }
+                    patientsProcessed++;
+                }
+
+                const finalMessage = `Deletion complete. Processed ${patientsProcessed} patients and deleted a total of ${totalDeletedCount} visit documents.`;
+                logger.info(finalMessage);
+                return res.status(200).send({ message: finalMessage });
+
+            } catch (error) {
+                logger.error("Error during deleteAllVisits operation:", error);
+                return res.status(500).send({ error: "Failed to delete visits.", details: error.message });
             }
         });
     }

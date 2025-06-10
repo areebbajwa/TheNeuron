@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const medicationsInput = document.getElementById('medicationsInput');
     const printReportButton = document.getElementById('printReportButton');
 
+    // New buttons for visit management (Task 8.3)
+    const clearVisitFieldsButton = document.getElementById('clearVisitFieldsButton');
+    const prevVisitButton = document.getElementById('prevVisitButton');
+    const nextVisitButton = document.getElementById('nextVisitButton');
+
     // Layout control elements
     const fontSizeControlsContainer = document.getElementById('font-size-controls-container');
     const saveLayoutButton = document.getElementById('saveLayoutButton');
@@ -46,15 +51,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentLastVisitData = null; // NEW: To store the last fetched visit data
     const reportFieldElements = Array.from(document.querySelectorAll('.report-field'));
 
+    // New state for visit navigation (Task 8.3)
+    let patientVisitHistory = []; // To store all visits of the selected patient
+    let currentVisitHistoryIndex = -1; // Index of the currently displayed visit in patientVisitHistory
+
     // --- Firebase Cloud Function URLs ---
-    const processAudioFunctionUrl = "https://processpatientaudio-pzytr7bzwa-uc.a.run.app";
-    const saveLayoutFunctionUrl = "https://savereportlayout-pzytr7bzwa-uc.a.run.app";
-    const getLayoutFunctionUrl = "https://getreportlayout-pzytr7bzwa-uc.a.run.app";
-    const searchPatientsFunctionUrl = "https://searchpatients-pzytr7bzwa-uc.a.run.app";
-    const createPatientFunctionUrl = "https://createpatient-pzytr7bzwa-uc.a.run.app";
-    const getPatientFunctionUrl = "https://getpatient-pzytr7bzwa-uc.a.run.app";
-    const savePatientVisitFunctionUrl = "https://savepatientvisit-pzytr7bzwa-uc.a.run.app";
-    const getLastPatientVisitFunctionUrl = "https://getlastpatientvisit-pzytr7bzwa-uc.a.run.app";
+    const useEmulator = false; // <--- SET TO true FOR EMULATOR, false FOR PRODUCTION
+
+    const prodProjectId = "theneuron-ac757";
+    const prodRegion = "us-central1"; // Or your specific region if different for prod
+    const prodBaseUrl = `https://${prodRegion}-${prodProjectId}.cloudfunctions.net`; // Common pattern for v1/v2 HTTP functions if not using custom domain
+    // Alternative for prod if functions have unique hostnames (e.g. from Cloud Run v2 integration):
+    // const prodProcessAudioFunctionUrl = "https://processpatientaudio-pzytr7bzwa-uc.a.run.app"; 
+
+    const localProjectId = "theneuron-ac757";
+    const localRegion = "us-central1";
+    const localBaseUrl = "http://localhost:5002/theneuron-ac757/us-central1";
+
+    let baseUrl = useEmulator ? localBaseUrl : prodBaseUrl;
+
+    // For production, ensure these paths match your deployed function names if they differ from local
+    // Or, if using unique hostnames per function in production (like Cloud Run v2), define them fully.
+    const processAudioFunctionUrl = useEmulator ? `${localBaseUrl}/processPatientAudio` : "https://processpatientaudio-pzytr7bzwa-uc.a.run.app";
+    const saveLayoutFunctionUrl = useEmulator ? `${localBaseUrl}/saveReportLayout` : "https://savereportlayout-pzytr7bzwa-uc.a.run.app";
+    const getLayoutFunctionUrl = useEmulator ? `${localBaseUrl}/getReportLayout` : "https://getreportlayout-pzytr7bzwa-uc.a.run.app";
+    const searchPatientsFunctionUrl = useEmulator ? `${localBaseUrl}/searchPatients` : "https://searchpatients-pzytr7bzwa-uc.a.run.app";
+    const createPatientFunctionUrl = useEmulator ? `${localBaseUrl}/createPatient` : "https://createpatient-pzytr7bzwa-uc.a.run.app";
+    const getPatientFunctionUrl = useEmulator ? `${localBaseUrl}/getPatient` : "https://getpatient-pzytr7bzwa-uc.a.run.app";
+    const savePatientVisitFunctionUrl = useEmulator ? `${localBaseUrl}/savePatientVisit` : "https://savepatientvisit-pzytr7bzwa-uc.a.run.app";
+    const getLastPatientVisitFunctionUrl = useEmulator ? `${localBaseUrl}/getLastPatientVisit` : "https://getlastpatientvisit-pzytr7bzwa-uc.a.run.app";
+    const getAllPatientVisitsFunctionUrl = useEmulator ? `${localBaseUrl}/getAllPatientVisits` : "https://getallpatientvisits-pzytr7bzwa-uc.a.run.app";
 
     // --- Initialize & Load Data ---
     // (Existing medication loading logic - can be kept or removed if not used client-side anymore)
@@ -106,6 +132,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             currentPatientId = null; // Reset patient context
             currentLastVisitData = null; // Reset visit context
+            patientVisitHistory = [];
+            currentVisitHistoryIndex = -1;
+            updateNavigationButtonsState();
+            clearOnlyVisitSpecificFields(); // Clear visit fields as well
             if(transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Sample data populated.';
         });
     }
@@ -369,7 +399,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentLastVisitData = null; // Reset visit data as well
             // Clear other patient-specific fields if name is cleared/too short
             clearPatientDemographicFields(false); // false = don't clear name itself
-            clearVisitSpecificFields(); // Clear visit fields
+            clearOnlyVisitSpecificFields(); // Clear visit fields
             return;
         }
 
@@ -413,80 +443,65 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function selectPatient(patient) {
+        if (!patient || !patient.id) {
+            console.error("selectPatient called with invalid patient data");
+            return;
+        }
+        currentPatientId = patient.id;
         patientNameInput.value = patient.name || '';
-        ageInput.value = patient.ageLastRecorded ? `${patient.ageLastRecorded} ${patient.ageUnitLastRecorded || ''}`.trim() : '';
+        patientNameSuggestionsDiv.innerHTML = '';
+        patientNameSuggestionsDiv.style.display = 'none';
+
+        // Populate demographic fields from the selected patient object
+        ageInput.value = patient.ageLastRecorded || '';
+        if (patient.ageLastRecorded && patient.ageUnitLastRecorded) {
+            ageInput.value += ` ${patient.ageUnitLastRecorded}`;
+        }
         genderInput.value = patient.sex || '';
+        reportCodeInput.value = patient.pReg || ''; 
         contactNoInput.value = patient.contactNo || '';
         nicNoInput.value = patient.nicNo || '';
         fatherNameInput.value = patient.fatherName || ''; // Occupation
         addressInput.value = patient.address || '';
-        reportCodeInput.value = patient.pReg || reportCodeInput.value; // Populate PReg if available
         
-        currentPatientId = patient.id; // Store Firestore document ID
-        currentLastVisitData = null; // Reset before fetching new
-        clearVisitSpecificFields(); // Clear old visit fields first
+        // Clear previous visit-specific data first
+        clearOnlyVisitSpecificFields(); 
+        patientVisitHistory = [];
+        currentVisitHistoryIndex = -1;
+        updateNavigationButtonsState();
 
-        console.log("Selected patient:", patient.name, "ID:", currentPatientId);
-        transcriptionOutputDiv.textContent = `Selected patient: ${patient.name}. Fetching last visit...`;
-        patientNameSuggestionsDiv.innerHTML = '';
-        patientNameSuggestionsDiv.style.display = 'none';
+        // Fetch and display all visits, then load the latest one
+        await fetchAndDisplayPatientVisitHistory(patient.id);
 
-        // Fetch last visit data
-        if (currentPatientId) {
-            try {
-                const response = await fetch(`${getLastPatientVisitFunctionUrl}?patientId=${currentPatientId}`);
-                if (response.ok) {
-                    const visit = await response.json();
-                    currentLastVisitData = visit; // Store the fetched visit data
-                    console.log("Last visit data:", visit);
-                    complaintsInput.value = visit.complaints || '';
-                    examinationInput.value = visit.examination || '';
-                    diagnosisInput.value = visit.diagnosis || '';
-                    if (visit.medications && Array.isArray(visit.medications)) {
-                        medicationsInput.value = visit.medications.map(med => `${med.name};${med.instructions};${med.duration}`).join('\n');
-                    } else {
-                        medicationsInput.value = '';
-                    }
-                    // Optionally populate reportDate if it's part of visit data and relevant here
-                    // reportDateInput.value = visit.visitDate ? new Date(visit.visitDate).toLocaleString() : reportDateInput.value;
-                    transcriptionOutputDiv.textContent = `Patient ${patient.name} selected. Last visit data populated.`;
-                } else if (response.status === 404) {
-                    transcriptionOutputDiv.textContent = `Patient ${patient.name} selected. No previous visits found.`;
-                    // No need to clear visit fields again, already done by clearVisitSpecificFields()
-                } else {
-                    const errText = await response.text();
-                    transcriptionOutputDiv.textContent = `Error fetching last visit: ${response.status} ${errText}`;
-                    console.error("Error fetching last visit:", response.statusText, errText);
-                }
-            } catch (error) {
-                transcriptionOutputDiv.textContent = `Network error fetching last visit: ${error.message}`;
-                console.error("Network error fetching last visit:", error);
-            }
-        }
+        if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Selected patient: ${patient.name} (ID: ${patient.id}). Last visit details loading...`;
     }
 
     function clearPatientDemographicFields(clearName = true) {
         if (clearName) patientNameInput.value = '';
         ageInput.value = '';
         genderInput.value = '';
+        reportCodeInput.value = '';
         contactNoInput.value = '';
         nicNoInput.value = '';
         fatherNameInput.value = '';
         addressInput.value = '';
-        // reportCodeInput.value = ''; // Decide if this should be cleared
-        // currentPatientId = null; // Handled by caller if needed
-        // currentLastVisitData should be cleared if patient context is lost
-        currentLastVisitData = null; // Let's clear it when the patient name input is cleared too.
+        currentPatientId = null;
+        
+        // Also clear visit history and related state
+        patientVisitHistory = [];
+        currentVisitHistoryIndex = -1;
+        updateNavigationButtonsState();
+        clearOnlyVisitSpecificFields(); 
     }
-    
-    function clearVisitSpecificFields() {
+
+    function clearOnlyVisitSpecificFields() {
         complaintsInput.value = '';
         examinationInput.value = '';
         diagnosisInput.value = '';
         medicationsInput.value = '';
-        currentLastVisitData = null;
-         // reportDateInput.value = ''; // keep auto-generated or manual date
-        // reportCodeInput.value = ''; // keep patient PReg
+        reportDateInput.value = ''; // Also clear report date if it's visit-specific
+        // Note: reportCodeInput (PReg) is patient-specific, so not cleared here.
+        // currentLastVisitData = null; // REPLACED
     }
 
     if (patientNameInput) {
@@ -619,33 +634,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Modify the function that processes Gemini's response
     async function processAudioAndPopulateFields(audioData, mimeType) {
-        if (!transcriptionOutputDiv) return;
-        transcriptionOutputDiv.textContent = 'Processing audio with AI...';
+        if (!audioData) {
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'No audio data to process.';
+            return;
+        }
+        if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Processing audio...';
+        
+        let requestBody = { audioData, audioMimeType: mimeType };
 
-        const requestBody = {
-            audioData: audioData,
-            audioMimeType: mimeType
-        };
-
-        // If there's existing visit data (which implies an existing patient), pass it for context
-        if (currentLastVisitData && currentPatientId) { // Ensure we have a patient context too
+        // Include existingPatientData if a specific visit is loaded (Task 8.3 adjustment)
+        if (currentVisitHistoryIndex !== -1 && patientVisitHistory[currentVisitHistoryIndex]) {
+            const currentVisit = patientVisitHistory[currentVisitHistoryIndex];
+            // Construct existingPatientData from the current visit
+            // Ensure it matches the structure expected by processPatientAudio CF
             requestBody.existingPatientData = {
-                patientName: patientNameInput.value, // Send current demographics in case they were manually edited
+                patientName: patientNameInput.value, // Demographic data is from main fields
                 age: ageInput.value,
                 gender: genderInput.value,
-                complaints: currentLastVisitData.complaints || complaintsInput.value, // Prefer data from form if user typed
-                examination: currentLastVisitData.examination || examinationInput.value,
-                diagnosis: currentLastVisitData.diagnosis || diagnosisInput.value,
-                medications: (currentLastVisitData.medications && currentLastVisitData.medications.length > 0)
-                             ? currentLastVisitData.medications
-                             : medicationsInput.value.split('\n').filter(Boolean).map(line => {
-                                 const parts = line.split(';');
-                                 return { name: parts[0] || 'N/A', instructions: parts[1] || 'N/A', duration: parts[2] || 'N/A' };
-                               })
+                complaints: currentVisit.complaints || '',
+                examination: currentVisit.examination || '',
+                diagnosis: currentVisit.diagnosis || '',
+                medications: currentVisit.medications || [] // Assuming medications is an array of objects
             };
-            console.log("Sending existing patient data to AI for update:", requestBody.existingPatientData);
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Processing audio (updating visit ${currentVisit.id || 'current'})...`;
+        } else {
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Processing audio (new visit data)..._PREVIOUS_AUDIO_PROCESS_TEXT_WAS_Processing audio..._HERE_PROCESS_AUDIO_TEXT_ENDS';
         }
-
 
         try {
             const response = await fetch(processAudioFunctionUrl, {
@@ -737,54 +751,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function ensurePatientExists() {
         if (currentPatientId) {
-            return currentPatientId; // Patient already selected or created
+            return currentPatientId;
         }
-        if (patientNameInput.value.trim() === '') {
-            transcriptionOutputDiv.textContent = 'Error: Patient name is required to save visit or create patient.';
-            throw new Error("Patient name required.");
+        // If no patient ID, but name is filled, try to create one.
+        const name = patientNameInput.value.trim();
+        if (!name) {
+            // alert('Patient Name is required to save or print.');
+            console.warn('Patient Name is required to save or print.');
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Patient Name is required to save or print.';
+            return null;
         }
-
-        transcriptionOutputDiv.textContent = 'New patient detected. Attempting to save patient data...';
-        console.log("ensurePatientExists: Attempting to create patient from form data.");
-
-        const patientToCreate = {
-            name: patientNameInput.value.trim(),
-            ageLastRecorded: ageInput.value.trim(), 
-            sex: genderInput.value.trim(),
-            contactNo: contactNoInput.value.trim(),
-            nicNo: nicNoInput.value.trim(),
-            fatherName: fatherNameInput.value.trim(),
-            address: addressInput.value.trim(),
-            pReg: reportCodeInput.value.includes('PR-') ? reportCodeInput.value.split('/').find(s => s.trim().startsWith('PR-'))?.trim() : '', // Extract PReg if present in code
-            isImported: false // New patients created via app are not from CSV import
-        };
-
+        if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Creating new patient...';
         try {
-            const createResponse = await fetch(createPatientFunctionUrl, {
+            const patientDataToCreate = {
+                name: name,
+                ageLastRecorded: ageInput.value.trim().split(' ')[0] || '', // Attempt to get just age number
+                ageUnitLastRecorded: ageInput.value.trim().split(' ')[1] || '', // Attempt to get unit
+                sex: genderInput.value.trim(),
+                contactNo: contactNoInput.value.trim(),
+                nicNo: nicNoInput.value.trim(),
+                fatherName: fatherNameInput.value.trim(), // Occupation
+                address: addressInput.value.trim(),
+                pReg: reportCodeInput.value.trim() // Send pReg if user entered it, backend handles if empty for new auto-gen
+            };
+
+            const response = await fetch(createPatientFunctionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(patientToCreate)
+                body: JSON.stringify(patientDataToCreate)
             });
-
-            if (createResponse.ok) {
-                const creationResult = await createResponse.json();
-                currentPatientId = creationResult.patientId;
-                transcriptionOutputDiv.textContent = `New patient '${patientToCreate.name}' saved with ID: ${currentPatientId}.`;
-                if (creationResult.pReg && !reportCodeInput.value.includes(creationResult.pReg)) {
-                     reportCodeInput.value = reportCodeInput.value ? `${reportCodeInput.value} / ${creationResult.pReg}` : creationResult.pReg;
-                }
-                console.log("ensurePatientExists: Patient created with ID:", currentPatientId);
-                return currentPatientId;
-            } else {
-                const errorResult = await createResponse.json().catch(() => ({ error: 'Unknown error creating patient' }));
-                transcriptionOutputDiv.textContent = `Error creating patient: ${errorResult.error || createResponse.statusText}`;
-                console.error("ensurePatientExists: Failed to create patient", errorResult);
-                throw new Error(`Failed to create patient: ${errorResult.error || createResponse.statusText}`);
+            if (!response.ok) {
+                const errorResult = await response.json().catch(() => ({ error: 'Unknown server error during patient creation' }));
+                throw new Error(errorResult.error || `Server error: ${response.status}`);
             }
-        } catch (err) {
-            transcriptionOutputDiv.textContent = `Network error creating patient: ${err.message}`;
-            console.error("ensurePatientExists: Network error creating patient", err);
-            throw err;
+            const result = await response.json();
+            currentPatientId = result.patientId; 
+            reportCodeInput.value = result.pReg || currentPatientId; // Update PReg field with new ID/PReg
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `New patient created: ${name} (ID: ${currentPatientId}).`;
+            return currentPatientId;
+        } catch (error) {
+            console.error("Error creating patient:", error);
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Error creating patient: ${error.message}`;
+            // alert(`Error creating patient: ${error.message}`);
+            return null;
         }
     }
 
@@ -853,116 +862,212 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- NEW: Medication Column Resizing (Task 5.5) ---
     function initializeMedicationColumnResizing() {
-        const medItems = document.querySelectorAll('.medication-item');
-        if (!currentLayoutSettings.medicationColWidths) { // Ensure defaults
-            currentLayoutSettings.medicationColWidths = { name: '30%', instructions: '45%', duration: '25%' };
+        const reportOutput = document.getElementById('reportOutput');
+        if (!reportOutput) return;
+
+        // Wait for the DOM to contain medication items after report generation
+        setTimeout(() => {
+            const medicationItems = reportOutput.querySelectorAll('.medication-item');
+            if (medicationItems.length === 0) return;
+
+            // For each medication item, find its columns
+            medicationItems.forEach(item => {
+                const nameCol = item.querySelector('.medication-name-col');
+                const instrCol = item.querySelector('.medication-instr-col');
+                const durCol = item.querySelector('.medication-dur-col');
+
+                // Apply stored/default widths
+                if (nameCol) nameCol.style.flexBasis = currentLayoutSettings.medicationColWidths.name;
+                if (instrCol) instrCol.style.flexBasis = currentLayoutSettings.medicationColWidths.instructions;
+                if (durCol) durCol.style.flexBasis = currentLayoutSettings.medicationColWidths.duration;
+                
+                // For simplicity, we'll make only the first two columns resizable.
+                // The third will take up remaining space or its default if others don't sum to 100%.
+                // Resizing one column needs to affect the others if we want to maintain a sum.
+                // A more robust solution might involve resizing handles between columns.
+                // For now, let's allow resizing name and instruction columns independently.
+
+                [nameCol, instrCol].forEach((col, index) => {
+                    if (!col) return;
+                    interact(col)
+                        .resizable({
+                            edges: { right: true }, // Resize from the right edge
+                            listeners: {
+                                move(event) {
+                                    const target = event.target;
+                                    let newWidth = event.rect.width; // This is pixel width
+                                    target.style.flexBasis = `${newWidth}px`; // Use pixels for direct manipulation
+
+                                    // Update stored settings (as pixels or convert back to percentage if desired)
+                                    if (index === 0) { // Name column
+                                        currentLayoutSettings.medicationColWidths.name = `${newWidth}px`;
+                                    } else if (index === 1) { // Instruction column
+                                        currentLayoutSettings.medicationColWidths.instructions = `${newWidth}px`;
+                                    }
+                                    // Note: Durations column will auto-adjust based on flex properties.
+                                    // If we want to store its percentage, we'd need to calculate it.
+                                },
+                                end(event) {
+                                    // Persist pixel values. If percentages are desired, more complex calculation needed here.
+                                    console.log('Medication column widths updated:', currentLayoutSettings.medicationColWidths);
+                                }
+                            },
+                            modifiers: [
+                                interact.modifiers.restrictSize({
+                                    min: { width: 30 } // Minimum width for a column
+                                })
+                            ]
+                        });
+                });
+            });
+        }, 100);
+    }
+
+    // --- Visit Navigation Functions (Task 8.3) ---
+    function updateNavigationButtonsState() {
+        if (!prevVisitButton || !nextVisitButton) return;
+        
+        const hasVisitHistory = patientVisitHistory && patientVisitHistory.length > 0;
+        const currentIndex = currentVisitHistoryIndex;
+        
+        if (!hasVisitHistory || currentIndex === -1) {
+            // No visits or no specific visit loaded
+            prevVisitButton.disabled = true;
+            nextVisitButton.disabled = true;
+        } else {
+            // Enable/disable based on current position in history
+            prevVisitButton.disabled = (currentIndex >= patientVisitHistory.length - 1);
+            nextVisitButton.disabled = (currentIndex <= 0);
+        }
+    }
+
+    async function fetchAndDisplayPatientVisitHistory(patientId) {
+        if (!patientId) {
+            console.warn("fetchAndDisplayPatientVisitHistory called with no patientId");
+            return;
         }
 
-        medItems.forEach(item => {
-            const nameCol = item.querySelector('.medication-name-col');
-            const instrCol = item.querySelector('.medication-instr-col');
-            const durCol = item.querySelector('.medication-dur-col');
+        try {
+            const response = await fetch(`${getAllPatientVisitsFunctionUrl}?patientId=${encodeURIComponent(patientId)}&orderBy=visitDate&orderDirection=desc`);
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // No visits found - this is normal for new patients
+                    patientVisitHistory = [];
+                    currentVisitHistoryIndex = -1;
+                    updateNavigationButtonsState();
+                    if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = "No previous visits found for this patient.";
+                    return;
+                }
+                throw new Error(`Failed to fetch visit history: ${response.statusText}`);
+            }
 
-            // Apply stored/default widths
-            if (nameCol) nameCol.style.flexBasis = currentLayoutSettings.medicationColWidths.name;
-            if (instrCol) instrCol.style.flexBasis = currentLayoutSettings.medicationColWidths.instructions;
-            if (durCol) durCol.style.flexBasis = currentLayoutSettings.medicationColWidths.duration;
+            const visits = await response.json();
+            patientVisitHistory = visits || [];
             
-            // For simplicity, we'll make only the first two columns resizable.
-            // The third will take up remaining space or its default if others don't sum to 100%.
-            // Resizing one column needs to affect the others if we want to maintain a sum.
-            // A more robust solution might involve resizing handles between columns.
-            // For now, let's allow resizing name and instruction columns independently.
+            if (patientVisitHistory.length > 0) {
+                // Load the most recent visit (index 0) into the form
+                currentVisitHistoryIndex = 0;
+                loadVisitDataIntoForm(patientVisitHistory[0]);
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Loaded last visit (${patientVisitHistory.length} total visits). Use navigation buttons to browse.`;
+            } else {
+                currentVisitHistoryIndex = -1;
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = "No previous visits found for this patient.";
+            }
+            
+            updateNavigationButtonsState();
 
-            [nameCol, instrCol].forEach((col, index) => {
-                if (!col) return;
-                interact(col)
-                    .resizable({
-                        edges: { right: true }, // Resize from the right edge
-                        listeners: {
-                            move(event) {
-                                const target = event.target;
-                                let newWidth = event.rect.width; // This is pixel width
-                                target.style.flexBasis = `${newWidth}px`; // Use pixels for direct manipulation
+        } catch (error) {
+            console.error("Error fetching patient visit history:", error);
+            patientVisitHistory = [];
+            currentVisitHistoryIndex = -1;
+            updateNavigationButtonsState();
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Error loading visit history: ${error.message}`;
+        }
+    }
 
-                                // Update stored settings (as pixels or convert back to percentage if desired)
-                                if (index === 0) { // Name column
-                                    currentLayoutSettings.medicationColWidths.name = `${newWidth}px`;
-                                } else if (index === 1) { // Instruction column
-                                    currentLayoutSettings.medicationColWidths.instructions = `${newWidth}px`;
-                                }
-                                // Note: Durations column will auto-adjust based on flex properties.
-                                // If we want to store its percentage, we'd need to calculate it.
-                            },
-                            end(event) {
-                                // Persist pixel values. If percentages are desired, more complex calculation needed here.
-                                console.log('Medication column widths updated:', currentLayoutSettings.medicationColWidths);
-                            }
-                        },
-                        modifiers: [
-                            interact.modifiers.restrictSize({
-                                min: { width: 30 } // Minimum width for a column
-                            })
-                        ]
-                    });
+    function loadVisitDataIntoForm(visit) {
+        if (!visit) {
+            console.warn("loadVisitDataIntoForm called with no visit data");
+            return;
+        }
+
+        // Populate visit-specific fields
+        complaintsInput.value = visit.complaints || '';
+        examinationInput.value = visit.examination || '';
+        diagnosisInput.value = visit.diagnosis || '';
+        
+        // Handle visit date
+        if (visit.visitDate) {
+            reportDateInput.value = visit.visitDate; // Expecting YYYY-MM-DD format
+        }
+
+        // Handle medications
+        if (visit.medications && Array.isArray(visit.medications)) {
+            const medicationLines = visit.medications.map(med => {
+                const name = med.name || 'N/A';
+                const instructions = med.instructions || 'N/A';
+                const duration = med.duration || 'N/A';
+                return `${name};${instructions};${duration}`;
             });
-        });
+            medicationsInput.value = medicationLines.join('\n');
+        } else {
+            medicationsInput.value = '';
+        }
     }
 
     // --- Print Report Button (Task 5.4 - Modified to save visit) ---
     if (printReportButton) {
         printReportButton.addEventListener('click', async () => {
-            transcriptionOutputDiv.textContent = 'Preparing report for printing...';
+            const patientId = await ensurePatientExists();
+            if (!patientId) return;
+
+            await updateReportPreview(); // Update the preview first
+
+            // Gather visit data from current form inputs
+            const visitDataPayload = {
+                visitDate: reportDateInput.value ? new Date(reportDateInput.value).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                complaints: complaintsInput.value.trim(),
+                examination: examinationInput.value.trim(),
+                diagnosis: diagnosisInput.value.trim(),
+                medications: medicationsInput.value.trim().split('\n').filter(line => line.trim() !== '').map(line => {
+                    const parts = line.split(';');
+                    return {
+                        name: parts[0] ? parts[0].trim() : 'N/A',
+                        instructions: parts[1] ? parts[1].trim() : 'N/A',
+                        duration: parts[2] ? parts[2].trim() : 'N/A'
+                    };
+                }),
+                // Add amountCharged if you have an input for it on this page, otherwise it's mainly for historical imports
+                 // amountCharged: parseFloat(document.getElementById('visitAmountInput')?.value) || 0 
+            };
+
+            // If a specific historical visit is loaded, include its ID to update it (Task 8.3 adjustment)
+            if (currentVisitHistoryIndex !== -1 && patientVisitHistory[currentVisitHistoryIndex] && patientVisitHistory[currentVisitHistoryIndex].id) {
+                visitDataPayload.visitId = patientVisitHistory[currentVisitHistoryIndex].id;
+            }
+
             try {
-                // Step 1: Ensure patient exists (or create if new and name is provided)
-                const patientIdForVisit = await ensurePatientExists();
-                if (!patientIdForVisit) { // Should be caught by ensurePatientExists, but as a safeguard
-                    transcriptionOutputDiv.textContent = 'Error: Cannot save visit without a patient.';
-                    return;
-                }
-
-                // Step 2: Update the visual report preview (important before print and for data consistency)
-                await updateReportPreview(); 
-
-                // Step 3: Gather visit data
-                const visitData = {
-                    visitDate: reportDateInput.value || new Date().toISOString(), // Use ISO string for consistency, or format as needed by backend
-                    reportCode: reportCodeInput.value.trim(),
-                    complaints: complaintsInput.value.trim(),
-                    examination: examinationInput.value.trim(),
-                    diagnosis: diagnosisInput.value.trim(),
-                    medications: medicationsInput.value.split('\n').filter(line => line.trim() !== '').map(line => {
-                        const parts = line.split(';');
-                        return { 
-                            name: (parts[0] || "N/A").trim(), 
-                            instructions: (parts[1] || "N/A").trim(), 
-                            duration: (parts[2] || "N/A").trim() 
-                        };
-                    })
-                };
-
-                // Step 4: Save the visit
-                transcriptionOutputDiv.textContent = `Saving visit for patient ID: ${patientIdForVisit}...`;
-                const saveVisitResponse = await fetch(savePatientVisitFunctionUrl, {
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Saving visit for patient ${patientId}...`;
+                const response = await fetch(savePatientVisitFunctionUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ patientId: patientIdForVisit, visitData: visitData })
+                    body: JSON.stringify({ patientId: patientId, visitData: visitDataPayload })
                 });
-
-                if (!saveVisitResponse.ok) {
-                    const errorResult = await saveVisitResponse.json().catch(() => ({error: 'Unknown error saving visit'}));
-                    throw new Error(`Failed to save visit: ${errorResult.error || saveVisitResponse.statusText}`);
+                if (!response.ok) {
+                    const errorResult = await response.json().catch(() => ({error: 'Failed to save visit.'}));
+                    throw new Error(errorResult.error || `Server error: ${response.statusText}`);
                 }
+                const saveResult = await response.json();
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Visit ${saveResult.action || 'saved'} (ID: ${saveResult.visitId}). Preparing to print...`;
+                
+                // After saving, refresh visit history to reflect changes or new visit
+                await fetchAndDisplayPatientVisitHistory(patientId);
 
-                const visitResult = await saveVisitResponse.json();
-                transcriptionOutputDiv.textContent = `Visit saved (ID: ${visitResult.visitId}). Preparing to print...`;
-
-                // Step 5: Print the report
-                window.print();
-
+                window.print(); // Open print dialog
             } catch (error) {
-                console.error("Error during print report process:", error);
-                transcriptionOutputDiv.textContent = `Error: ${error.message}`;
+                console.error("Error saving patient visit:", error);
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Error saving visit: ${error.message}`;
+                // alert(`Error saving visit: ${error.message}`);
             }
         });
     }
@@ -1008,15 +1113,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- Initialize on Page Load ---
-    await loadLayoutFromServer(); // Load general layout first
-    // updateReportPreview(); // Call this to render any initial data and init med col resizers
-    // Initial call to setup font size controls based on loaded or default layout
-    // setupFontSizeControls(); // Already called in loadLayoutFromServer
-    // initializeInteractJs(); // Already called in loadLayoutFromServer
-
-    // If there's initial data in medicationsInput (e.g. from sample data or browser cache), render it
-    if (medicationsInput.value.trim() !== '') {
-        await updateReportPreview();
+    // --- Event Listeners for new buttons (Task 8.3) ---
+    if (clearVisitFieldsButton) {
+        clearVisitFieldsButton.addEventListener('click', () => {
+            clearOnlyVisitSpecificFields();
+            currentVisitHistoryIndex = -1; // Indicate no specific historical visit is loaded
+            // Transcription output should reflect that the form is ready for new visit entry or select a patient
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = "Visit fields cleared. Ready for new visit data or select a patient.";
+            updateNavigationButtonsState();
+        });
     }
+
+    if (prevVisitButton) {
+        prevVisitButton.addEventListener('click', () => {
+            if (currentVisitHistoryIndex > 0) {
+                currentVisitHistoryIndex--;
+                loadVisitDataIntoForm(patientVisitHistory[currentVisitHistoryIndex]);
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Displaying previous visit (${currentVisitHistoryIndex + 1} of ${patientVisitHistory.length}).`;
+            }
+            updateNavigationButtonsState();
+        });
+    }
+
+    if (nextVisitButton) {
+        nextVisitButton.addEventListener('click', () => {
+            if (currentVisitHistoryIndex >= 0 && currentVisitHistoryIndex < patientVisitHistory.length - 1) {
+                currentVisitHistoryIndex++;
+                loadVisitDataIntoForm(patientVisitHistory[currentVisitHistoryIndex]);
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Displaying next visit (${currentVisitHistoryIndex + 1} of ${patientVisitHistory.length}).`;
+            }
+            updateNavigationButtonsState();
+        });
+    }
+
+    // --- Initial Page Load Setup ---
+    try {
+        await loadLayoutFromServer(); // Load saved layout settings first
+    } catch (error) {
+        console.warn("Could not load layout from server on initial load:", error.message);
+        // Apply default CSS or fallback if needed, though applyLayoutSettings handles missing settings.
+    }
+    initializeInteractJs(); // Initialize draggable/resizable elements after settings are potentially loaded
+    setupFontSizeControls(); // Setup font size inputs after settings are potentially loaded
+    updateNavigationButtonsState(); // Initial state for nav buttons
+
+    if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = "System ready. Select a patient or start new report.";
+    
+    // Example: Auto-select a patient if ID is in URL (for testing/dev)
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const autoPatientId = urlParams.get('patientId');
+    // if (autoPatientId) {
+    //     console.log("Attempting to auto-load patient:", autoPatientId);
+    //     // You'd need a function to fetch this specific patient by ID and then call selectPatient
+    //     // fetchPatientByIdAndSelect(autoPatientId);
+    // }
 }); 
