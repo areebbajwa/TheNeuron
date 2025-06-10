@@ -396,104 +396,100 @@ exports.getLastPatientVisit = onRequest(
 // --- Patient Management Cloud Functions (Task 5.1) ---
 
 // Function to create a new patient or add an imported one
-exports.createPatient = onRequest(
-    { region: 'us-central1', memory: '256MB' },
+// Renaming to createPatientHttp to match script and enabling batching.
+exports.createPatientHttp = onRequest(
+    { region: 'us-central1', memory: '512MB' }, // Increased memory for batch potential
     async (req, res) => {
         corsMiddleware(req, res, async () => {
-            logger.info("Request received for createPatient", { method: req.method });
+            logger.info("Request received for createPatientHttp (batch)", { method: req.method });
             if (req.method !== "POST") {
                 return res.status(405).send({ error: "Method Not Allowed" });
             }
 
-            try {
-                const patientData = req.body;
-                if (!patientData || !patientData.name) { // Basic validation
-                    logger.warn("Bad Request: Missing patient name for createPatient");
-                    return res.status(400).send({ error: "Bad Request: Missing patient name." });
-                }
+            const patientDataArray = req.body.patients;
+            if (!patientDataArray || !Array.isArray(patientDataArray) || patientDataArray.length === 0) {
+                logger.warn("Bad Request: 'patients' array is required for createPatientHttp.");
+                return res.status(400).json({ error: "Request body must be a non-empty array of patient objects under the 'patients' key." });
+            }
 
-                const patientsCollection = db.collection('patients');
-                const now = FieldValue.serverTimestamp();
-                
-                let patientIdToReturn;
-                let pRegToReturn;
+            logger.info(`createPatientHttp (batch) processing ${patientDataArray.length} patients.`);
+            const results = [];
+            let successCount = 0;
+            let failureCount = 0;
+            const errors = [];
 
-                // Ensure updatedAt is set for all paths
-                patientData.updatedAt = now;
-
-                // Ensure name_normalized is present for both new and imported patients
-                if (patientData.name && typeof patientData.name === 'string' && !patientData.name_normalized) {
-                    patientData.name_normalized = patientData.name.trim().toLowerCase();
-                }
-
-                if (patientData.pReg && patientData.isImported === true) { // For imported patients
-                    const importedPatientRef = patientsCollection.doc(patientData.pReg);
-                    // Ensure createdAt is set for imported patients if not already present
-                    // name_normalized should already be in patientData from the import script
-                    const dataToSet = { ...patientData, createdAt: patientData.createdAt || now };
-                    await importedPatientRef.set(dataToSet, { merge: true });
-                    
-                    patientIdToReturn = importedPatientRef.id;
-                    pRegToReturn = patientData.pReg;
-                    logger.info("Imported patient data set in Firestore.", { documentId: patientIdToReturn, pReg: pRegToReturn });
-                    return res.status(201).send({ success: true, patientId: patientIdToReturn, pReg: pRegToReturn, message: "Patient imported successfully." });
-
-                } else { // For new patients created via the app (auto-increment PReg)
-                    const counterRef = db.collection('counters').doc('patientPRegCounter');
-                    let newGeneratedPReg;
-                    const PReg_INITIAL_START_VALUE = 5784; // Number of imported patients
-
-                    try {
-                        patientIdToReturn = await db.runTransaction(async (transaction) => {
-                            const counterDoc = await transaction.get(counterRef);
-                            let currentPRegCounterValue = 0;
-                            if (counterDoc.exists && counterDoc.data() && typeof counterDoc.data().lastNumericPReg === 'number') {
-                                currentPRegCounterValue = counterDoc.data().lastNumericPReg;
-                            }
-
-                            // Ensure the counter starts above the imported patient range
-                            if (currentPRegCounterValue < PReg_INITIAL_START_VALUE) {
-                                currentPRegCounterValue = PReg_INITIAL_START_VALUE;
-                            }
-
-                            newGeneratedPReg = currentPRegCounterValue + 1;
-
-                            // Prepare patient data, ensuring no pReg or isImported is taken from client for new patients
-                            // Client should not send these for new app-created patients.
-                            const { pReg, isImported, ...restOfPatientData } = patientData; 
-                            
-                            const finalNewPatientData = {
-                                ...restOfPatientData, // Contains name, potentially age, gender, etc., and updatedAt
-                                name_normalized: restOfPatientData.name ? restOfPatientData.name.trim().toLowerCase() : '', // Ensure it is set for new patients
-                                pReg: newGeneratedPReg, // Assign the new numeric PReg
-                                isImported: false,
-                                createdAt: now, // createdAt is set here
-                                // updatedAt is already part of restOfPatientData or patientData if top-level set is preferred
-                            };
-
-                            // Create new patient document with auto-generated ID
-                            const newPatientDocRef = patientsCollection.doc(); // Auto-generate ID
-                            transaction.set(newPatientDocRef, finalNewPatientData);
-                            
-                            // Update the counter
-                            transaction.set(counterRef, { lastNumericPReg: newGeneratedPReg }, { merge: true });
-                            
-                            return newPatientDocRef.id; // Return the auto-generated Firestore doc ID
-                        });
-                        
-                        pRegToReturn = newGeneratedPReg;
-                        logger.info("New patient created in Firestore with auto-incremented PReg.", { documentId: patientIdToReturn, pReg: pRegToReturn });
-                        return res.status(201).send({ success: true, patientId: patientIdToReturn, pReg: pRegToReturn, message: "Patient created successfully." });
-
-                    } catch (transactionError) {
-                        logger.error("Transaction failed for auto-increment PReg:", { errorMessage: transactionError.message, errorStack: transactionError.stack, details: transactionError });
-                        // Rethrow to be caught by the outer catch block
-                        throw transactionError; 
+            for (const patientData of patientDataArray) {
+                try {
+                    if (!patientData || !patientData.name || !patientData.pReg) { // Basic validation for batch items
+                        logger.warn("Skipping patient in batch due to missing name or pReg:", patientData);
+                        failureCount++;
+                        errors.push({ pReg: patientData.pReg, error: "Missing name or pReg" });
+                        results.push({pReg: patientData.pReg, status: "skipped", reason: "Missing name or pReg"});
+                        continue;
                     }
+
+                    const pRegFromData = patientData.pReg;
+                    const patientsCollection = db.collection('patients');
+                    const now = admin.firestore.FieldValue.serverTimestamp(); // Use admin.firestore
+
+                    // For imported patients (script should always set isImported: true and provide pReg)
+                    if (patientData.isImported === true) {
+                        const patientDocRef = patientsCollection.doc(pRegFromData); // Use PReg from CSV as Document ID
+                        const existingDoc = await patientDocRef.get();
+
+                        if (existingDoc.exists) {
+                            logger.info(`Patient with PReg (doc ID) ${pRegFromData} already exists. Skipping creation.`);
+                            successCount++; // Count as success as it exists or was processed
+                            results.push({ pReg: pRegFromData, id: existingDoc.id, status: "exists" });
+                            continue;
+                        }
+
+                        const dataToSet = {
+                            ...patientData,
+                            name_normalized: patientData.name ? patientData.name.trim().toLowerCase() : '' ,
+                            createdAt: patientData.createdAt || now, // Use provided or set new
+                            updatedAt: now
+                        };
+                        await patientDocRef.set(dataToSet); // Not merging, as we expect to create if not existing
+                        logger.info("Imported patient data set in Firestore.", { documentId: patientDocRef.id, pReg: pRegFromData });
+                        successCount++;
+                        results.push({ pReg: pRegFromData, id: patientDocRef.id, status: "created" });
+                    } else {
+                        // This branch is for NON-IMPORTED patients (e.g., from app), requires PReg generation.
+                        // For the current script, this path should ideally not be hit if script sets isImported: true.
+                        // If script might send isImported: false, this PReg generation logic needs to be robust for batches.
+                        // The original single PReg generation logic is complex for batching directly here due to transactions.
+                        // For now, log a warning if this path is taken by the import script unexpectedly.
+                        logger.warn("Attempted to create non-imported patient via batch import script. This is unexpected.", { pRegFromData });
+                        failureCount++;
+                        errors.push({ pReg: pRegFromData, error: "Batch creation of non-imported new patients via this endpoint is not fully supported for PReg generation." });
+                        results.push({pReg: pRegFromData, status: "error", reason: "PReg generation for new non-imported patient in batch not supported here."});
+                        // To properly support, would need a batch PReg allocation or different endpoint.
+                    }
+                } catch (error) {
+                    logger.error("Error processing patient in batch for createPatientHttp:", { pReg: patientData.pReg, errorMessage: error.message, errorStack: error.stack });
+                    failureCount++;
+                    errors.push({ pReg: patientData.pReg, error: error.message });
+                    results.push({ pReg: patientData.pReg, status: "error", reason: error.message});
                 }
-            } catch (error) {
-                logger.error("Error creating patient in Firestore (outer catch):", { errorMessage: error.message, errorStack: error.stack, details: error });
-                return res.status(500).send({ error: "Internal Server Error creating patient.", details: error.message });
+            }
+
+            logger.info(`Batch createPatientHttp finished. Success/Exists: ${successCount}, Failure: ${failureCount}`);
+            if (failureCount > 0) {
+                return res.status(207).json({ // Multi-Status
+                    message: "Batch patient operation completed with some errors.",
+                    successCount,
+                    failureCount,
+                    results,
+                    errors
+                });
+            } else {
+                return res.status(201).json({
+                    message: "All patients in batch processed successfully.",
+                    successCount,
+                    failureCount: 0,
+                    results
+                });
             }
         });
     }
@@ -812,59 +808,183 @@ exports.savePatientVisit = onRequest(
 );
 
 // --- NEW Cloud Function to Add a Historical Visit (for bulk import script) ---
+// Modifying for batch processing
 exports.addHistoricalVisit = onRequest(
-    { region: 'us-central1', memory: '256MB' }, // Adjusted memory, can be tuned
+    { region: 'us-central1', memory: '512MB' }, // Increased memory for batch
     async (req, res) => {
         corsMiddleware(req, res, async () => {
-            logger.info("Request received for addHistoricalVisit", { method: req.method });
+            logger.info("Request received for addHistoricalVisit (batch)", { method: req.method });
+            if (req.method !== "POST") {
+                return res.status(405).send({ error: "Method Not Allowed" });
+            }
+
+            const visitsArray = req.body.visits; // Expecting an array of { patientId, visitData }
+            if (!visitsArray || !Array.isArray(visitsArray) || visitsArray.length === 0) {
+                logger.warn("Bad Request: 'visits' array is required for addHistoricalVisit.");
+                return res.status(400).json({ error: "Request body must be a non-empty array of visit objects under the 'visits' key, each with 'patientId' (PReg) and 'visitData'." });
+            }
+
+            logger.info(`addHistoricalVisit (batch) processing ${visitsArray.length} visits.`);
+            const results = [];
+            let successCount = 0;
+            let failureCount = 0;
+            const errors = [];
+            const importTimestamp = admin.firestore.FieldValue.serverTimestamp(); // Use admin.firestore
+
+            for (const item of visitsArray) {
+                const { patientId, visitData } = item; // patientId is PReg from script
+
+                if (!patientId || !visitData || typeof visitData !== 'object' || !visitData.visitDate) {
+                    logger.warn("Skipping visit in batch due to missing patientId, visitData, or visitData.visitDate:", item);
+                    failureCount++;
+                    const pId = patientId || "N/A";
+                    const vDate = (visitData && visitData.visitDate) ? visitData.visitDate : "N/A";
+                    errors.push({ patientId: pId, visitDate: vDate, error: "Missing patientId, visitData, or visitData.visitDate" });
+                    results.push({ patientId: pId, visitDate: vDate, status: "skipped", reason: "Missing patientId, visitData, or visitData.visitDate"});
+                    continue;
+                }
+
+                try {
+                    const patientDocRef = db.collection('patients').doc(patientId); // patientId from script is PReg (document ID)
+                    // No need to explicitly check patientDoc.exists for adding to subcollection, 
+                    // but for robustness in import, good to know if parent doesn't exist.
+                    // However, function will still try to write to subcollection path.
+                    // If parent doesn't exist, subcollection write creates the path but parent remains non-existent.
+                    // For cleaner data, ensure patients are created first.
+                    // The script does patients first, so this should be okay.
+
+                    const dataToSave = {
+                        ...visitData, 
+                        pReg: patientId, // Store PReg in visit doc for convenience
+                        importedAt: importTimestamp 
+                    };
+
+                    const visitCollectionRef = patientDocRef.collection('visits');
+                    const newVisitRef = await visitCollectionRef.add(dataToSave);
+                    
+                    // logger.info("Historical patient visit saved successfully in batch.", { patientId: patientId, visitId: newVisitRef.id, historicalVisitDate: visitData.visitDate });
+                    successCount++;
+                    results.push({ patientId, visitDate: visitData.visitDate, visitId: newVisitRef.id, status: "created" });
+
+                } catch (error) {
+                    logger.error("Error saving historical patient visit in batch:", { patientId, visitDate: visitData.visitDate, errorMessage: error.message, errorStack: error.stack });
+                    failureCount++;
+                    errors.push({ patientId, visitDate: visitData.visitDate, error: error.message });
+                    results.push({ patientId, visitDate: visitData.visitDate, status: "error", reason: error.message });
+                }
+            }
+
+            logger.info(`Batch addHistoricalVisit finished. Success: ${successCount}, Failure: ${failureCount}`);
+            if (failureCount > 0) {
+                return res.status(207).json({ // Multi-Status
+                    message: "Batch visit operation completed with some errors.",
+                    successCount,
+                    failureCount,
+                    results,
+                    errors
+                });
+            } else {
+                return res.status(201).json({
+                    message: "All visits in batch processed successfully.",
+                    successCount,
+                    failureCount: 0,
+                    results
+                });
+            }
+        });
+    }
+);
+
+// --- NEW Cloud Function to Create a Single Patient (for UI) ---
+exports.createPatient = onRequest(
+    { region: 'us-central1', memory: '256MB' },
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            logger.info("Request received for createPatient", { method: req.method });
             if (req.method !== "POST") {
                 return res.status(405).send({ error: "Method Not Allowed" });
             }
 
             try {
-                const { patientId, visitData } = req.body;
+                const patientData = req.body;
 
-                if (!patientId) {
-                    logger.warn("Bad Request: Missing patientId for addHistoricalVisit");
-                    return res.status(400).send({ error: "Bad Request: Missing patientId." });
-                }
-                if (!visitData || typeof visitData !== 'object' || Object.keys(visitData).length === 0) {
-                    logger.warn("Bad Request: Missing or empty visitData for addHistoricalVisit");
-                    return res.status(400).send({ error: "Bad Request: Missing or invalid visitData." });
-                }
-                if (!visitData.visitDate) { // Specifically check for visitDate from CSV
-                    logger.warn("Bad Request: visitData is missing the 'visitDate' field for addHistoricalVisit");
-                    return res.status(400).send({ error: "Bad Request: visitData must contain a 'visitDate' field." });
+                if (!patientData || typeof patientData !== 'object' || !patientData.name) {
+                    logger.warn("Bad Request: Missing patient data or name for createPatient");
+                    return res.status(400).send({ error: "Bad Request: Missing patient data or name." });
                 }
 
-                // Optional: Validate patient exists. For bulk import, this might be skipped for speed if demographic import ran first.
-                // However, for robustness, it's good to have:
-                const patientDocRef = db.collection('patients').doc(patientId);
-                const patientDoc = await patientDocRef.get();
-                if (!patientDoc.exists) {
-                    logger.warn("Patient not found for addHistoricalVisit", { patientId });
-                    // For bulk import, we might want to log this and continue, or stop. 
-                    // Returning 404 for now, script can decide how to handle.
-                    return res.status(404).send({ error: `Patient ${patientId} not found. Cannot save historical visit.` });
-                }
+                const counterRef = db.collection('_constants').doc('patientCounter');
+                let newPRegNumber;
 
-                // Add an import timestamp, distinct from the historical visitDate from CSV
-                const importTimestamp = FieldValue.serverTimestamp();
+                // Transaction to get and update the counter
+                await db.runTransaction(async (transaction) => {
+                    const counterDoc = await transaction.get(counterRef);
+                    if (!counterDoc.exists || !counterDoc.data().lastPRegNumber) {
+                        newPRegNumber = 1; // Start from 1 if counter doesn't exist or field is missing
+                    } else {
+                        newPRegNumber = counterDoc.data().lastPRegNumber + 1;
+                    }
+                    transaction.set(counterRef, { lastPRegNumber: newPRegNumber }, { merge: true });
+                });
+
+                const newPReg = `PR-${newPRegNumber}`;
+                const patientDocRef = db.collection('patients').doc(newPReg);
+                const now = FieldValue.serverTimestamp();
+
                 const dataToSave = {
-                    ...visitData, // This includes visitDate from CSV, complaints, meds etc.
-                    importedAt: importTimestamp // Marks when this record was imported
+                    ...patientData,
+                    pReg: newPReg,
+                    name_normalized: patientData.name ? patientData.name.trim().toLowerCase() : '',
+                    isImported: false,
+                    createdAt: now,
+                    updatedAt: now
                 };
+                
+                // Remove id if it was accidentally passed in the body for a new patient
+                delete dataToSave.id;
 
-                const visitCollectionRef = patientDocRef.collection('visits');
-                const newVisitRef = await visitCollectionRef.add(dataToSave);
 
-                logger.info("Historical patient visit saved successfully.", { patientId: patientId, visitId: newVisitRef.id, historicalVisitDate: visitData.visitDate });
-                // Return 200 or 201. 201 is typical for new resource creation.
-                return res.status(201).send({ success: true, visitId: newVisitRef.id, message: "Historical patient visit saved successfully." });
+                await patientDocRef.set(dataToSave);
+
+                logger.info("New patient created successfully via UI.", { patientId: newPReg, pReg: newPReg });
+                return res.status(201).send({ patientId: newPReg, message: "Patient created successfully." });
 
             } catch (error) {
-                logger.error("Error saving historical patient visit to Firestore:", { errorMessage: error.message, errorStack: error.stack, body: req.body });
-                return res.status(500).send({ error: "Internal Server Error saving historical patient visit.", details: error.message });
+                logger.error("Error creating new patient via UI:", { errorMessage: error.message, errorStack: error.stack });
+                return res.status(500).send({ error: "Internal Server Error creating patient.", details: error.message });
+            }
+        });
+    }
+);
+
+// --- NEW Cloud Function to Set Patient Counter ---
+exports.setPatientCounter = onRequest(
+    { region: 'us-central1', memory: '128MB' },
+    async (req, res) => {
+        corsMiddleware(req, res, async () => {
+            logger.info("Request received for setPatientCounter", { method: req.method });
+            if (req.method !== "POST") {
+                return res.status(405).send({ error: "Method Not Allowed" });
+            }
+
+            try {
+                const data = req.body;
+                const lastPRegNumber = data.lastPRegNumber;
+
+                if (typeof lastPRegNumber !== 'number' || lastPRegNumber < 0) {
+                    logger.warn("Bad request to setPatientCounter: lastPRegNumber is invalid.", { data });
+                    return res.status(400).send({ error: "Invalid lastPRegNumber. Must be a non-negative number." });
+                }
+
+                const counterRef = db.collection('_constants').doc('patientCounter');
+                await counterRef.set({ lastPRegNumber: lastPRegNumber }, { merge: true });
+
+                logger.info(`Patient counter successfully set to ${lastPRegNumber}.`);
+                res.status(200).send({ success: true, message: `Patient counter set to ${lastPRegNumber}.` });
+
+            } catch (error) {
+                logger.error("Error in setPatientCounter:", { error: error.message, stack: error.stack });
+                res.status(500).send({ error: "Internal Server Error setting patient counter.", details: error.message });
             }
         });
     }

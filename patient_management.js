@@ -205,8 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Assuming deletePatient CF expects ID in the URL path
-            const response = await fetch(`${deletePatientFunctionUrl}/${patientId}`, {
+            // Assuming deletePatient CF expects ID in the URL path -- CORRECTING THIS ASSUMPTION
+            const response = await fetch(`${deletePatientFunctionUrl}?id=${patientId}`, {
                 method: 'DELETE'
             });
 
