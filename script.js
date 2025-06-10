@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentVisitHistoryIndex = -1; // Index of the currently displayed visit in patientVisitHistory
 
     // --- Firebase Cloud Function URLs ---
-    const useEmulator = false; // <--- SET TO true FOR EMULATOR, false FOR PRODUCTION
+    const useEmulator = false; // Set to true to use Firebase emulators
 
     const prodProjectId = "theneuron-ac757";
     const prodRegion = "us-central1"; // Or your specific region if different for prod
@@ -64,9 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Alternative for prod if functions have unique hostnames (e.g. from Cloud Run v2 integration):
     // const prodProcessAudioFunctionUrl = "https://processpatientaudio-pzytr7bzwa-uc.a.run.app"; 
 
-    const localProjectId = "theneuron-ac757";
-    const localRegion = "us-central1";
-    const localBaseUrl = "http://localhost:5002/theneuron-ac757/us-central1";
+    let localBaseUrl = "";
 
     let baseUrl = useEmulator ? localBaseUrl : prodBaseUrl;
 

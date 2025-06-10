@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addressForm = document.getElementById('addressForm');
 
     // --- Firebase Cloud Function URLs ---
-    const useEmulator = false; // <--- SET TO true FOR EMULATOR, false FOR PRODUCTION
+    const useEmulator = false; // Set to true to use Firebase emulators
 
     const prodProjectId = "theneuron-ac757";
     const prodRegion = "us-central1";
