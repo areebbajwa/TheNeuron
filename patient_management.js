@@ -231,9 +231,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const result = await response.json();
-            console.log(`Patient ${currentEditPatientId ? 'updated' : 'saved'} successfully! ID: ${result.patientId || currentEditPatientId}`);
-            hidePatientForm();
-            fetchAndDisplayPatients(searchInput.value.trim()); // Refresh list with current search or all
+            const patientId = result.patientId || currentEditPatientId;
+            console.log(`Patient ${currentEditPatientId ? 'updated' : 'saved'} successfully! ID: ${patientId}`);
+            
+            // If this is a new patient (not an update), navigate to main page with patient ID
+            if (!currentEditPatientId && patientId) {
+                // Navigate to index.html with the new patient ID
+                window.location.href = `index.html?patientId=${encodeURIComponent(patientId)}`;
+            } else {
+                // For updates, just refresh the list
+                hidePatientForm();
+                fetchAndDisplayPatients(searchInput.value.trim()); // Refresh list with current search or all
+            }
         } catch (error) {
             console.error('Error saving patient:', error);
             console.log(`Error saving patient: ${error.message}`);

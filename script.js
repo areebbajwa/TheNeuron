@@ -440,6 +440,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         patientNameSuggestionsDiv.style.display = 'block';
     }
 
+    async function fetchPatientByIdAndSelect(patientId) {
+        try {
+            const response = await fetch(`${getPatientFunctionUrl}?id=${encodeURIComponent(patientId)}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch patient: ${response.status}`);
+            }
+            const patient = await response.json();
+            if (patient) {
+                selectPatient(patient);
+            } else {
+                console.error('Patient not found:', patientId);
+                if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = 'Patient not found.';
+            }
+        } catch (error) {
+            console.error('Error fetching patient by ID:', error);
+            if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = `Error loading patient: ${error.message}`;
+        }
+    }
+
     async function selectPatient(patient) {
         if (!patient || !patient.id) {
             console.error("selectPatient called with invalid patient data");
@@ -1161,12 +1180,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (transcriptionOutputDiv) transcriptionOutputDiv.textContent = "System ready. Select a patient or start new report.";
     
-    // Example: Auto-select a patient if ID is in URL (for testing/dev)
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const autoPatientId = urlParams.get('patientId');
-    // if (autoPatientId) {
-    //     console.log("Attempting to auto-load patient:", autoPatientId);
-    //     // You'd need a function to fetch this specific patient by ID and then call selectPatient
-    //     // fetchPatientByIdAndSelect(autoPatientId);
-    // }
+    // Auto-select a patient if ID is in URL (from patient management)
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoPatientId = urlParams.get('patientId');
+    if (autoPatientId) {
+        console.log("Attempting to auto-load patient:", autoPatientId);
+        // Fetch this specific patient by ID and then call selectPatient
+        fetchPatientByIdAndSelect(autoPatientId);
+    }
 }); 
