@@ -56,6 +56,32 @@ body {
     font-style: italic;
 }
 
+/* Audio-fillable field indicators */
+.input-section input[id="patientName"],
+.input-section input[id="age"],
+.input-section input[id="gender"],
+.input-section input[id="contactNo"],
+.input-section input[id="nicNo"],
+.input-section input[id="fatherName"],
+.input-section textarea[id="address"],
+.input-section textarea[id="complaints"],
+.input-section textarea[id="diagnosis"],
+.input-section textarea[id="examination"],
+.input-section textarea[id="medicationsInput"] {
+    border-left: 3px solid #28a745;
+}
+
+.input-section label::after {
+    content: " 🎤";
+    font-size: 0.8em;
+    opacity: 0.6;
+}
+
+.input-section label[for="reportDate"]::after,
+.input-section label[for="reportCode"]::after {
+    content: "";
+}
+
 .input-section {
     width: 100%;
     max-width: 800px; /* Increased max width */
