@@ -7,6 +7,55 @@ body {
     font-size: 16px; /* Increased base font size */
 }
 
+/* Recording controls at top */
+.recording-controls-top {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 2px solid #dee2e6;
+}
+
+.recording-controls-top button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.primary-recording-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.primary-recording-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.danger-recording-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.danger-recording-btn:hover {
+    background-color: #c82333;
+}
+
+.recording-hint {
+    margin-top: 10px;
+    font-size: 0.95em;
+    color: #6c757d;
+    font-style: italic;
+}
+
 .input-section {
     width: 100%;
     max-width: 800px; /* Increased max width */

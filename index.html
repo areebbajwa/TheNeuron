@@ -9,6 +9,13 @@
 </head>
 <body>
     <div class="input-section">
+        <div class="recording-controls-top">
+            <button id="startRecordingButton" class="primary-recording-btn">Start Recording</button>
+            <button id="stopRecordingButton" class="danger-recording-btn" style="display: none;">Stop Recording</button>
+            <button id="reprocessAudioButton" style="display: none; margin-left: 10px;">Reprocess Last Audio</button>
+            <p class="recording-hint">Speak in Urdu/Punjabi for patient details, English for medical terms</p>
+        </div>
+        
         <h2>Patient & Report Details</h2>
         <div class="autocomplete-container">
             <label for="patientName">Patient Name:</label>
@@ -66,9 +73,6 @@
             <button id="populateSampleDataButton">Populate Sample Data</button>
             <button id="generateReportButton">Generate Report</button>
             <button id="printReportButton">Print Report</button>
-            <button id="startRecordingButton">Start Recording</button>
-            <button id="stopRecordingButton" style="display: none;">Stop Recording</button>
-            <button id="reprocessAudioButton" style="display: none; margin-left: 10px;">Reprocess Last Audio</button>
         </div>
 
         <div class="action-buttons-bar" id="visit-actions-bar">
