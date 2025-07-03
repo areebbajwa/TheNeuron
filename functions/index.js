@@ -109,14 +109,24 @@ exports.processPatientAudio = onRequest(
                     // Prompt for updating existing data
                     prompt = `
 You are an expert medical assistant. You are given existing patient report data and a new audio narration from a doctor for the same patient.
+The doctor will speak in a mix of Urdu/Punjabi (for patient demographics) and English (for medical terms).
 Listen to the audio and intelligently UPDATE the provided existing data based on the doctor's new narration.
 Focus on modifying fields if the doctor provides new or changed information for them. If a field is not mentioned in the new audio, try to keep its existing value unless the new context implies it should be cleared or changed.
+
+IMPORTANT LANGUAGE CONTEXT:
+- Patient names will often be in Urdu/Punjabi (e.g., محمد علی، فاطمہ بی بی، راشد احمد)
+- Common Urdu/Punjabi name patterns: Mohammad/Muhammad, Ali, Ahmed/Ahmad, Rashid, Fatima, Ayesha, Khadija, Bibi, Begum
+- Addresses may include areas like: Gulberg, Johar Town, Model Town, Shadman, DHA, Cantt, etc.
 
 Here is the existing patient report data:
 --- EXISTING DATA START ---
 Patient Name: ${existingPatientData.patientName || 'N/A'}
 Age: ${existingPatientData.age || 'N/A'}
 Gender: ${existingPatientData.gender || 'N/A'}
+Contact No: ${existingPatientData.contactNo || 'N/A'}
+NIC No: ${existingPatientData.nicNo || 'N/A'}
+Occupation: ${existingPatientData.occupation || 'N/A'}
+Address: ${existingPatientData.address || 'N/A'}
 Complaints: ${existingPatientData.complaints || 'N/A'}
 Examination: ${existingPatientData.examination || 'N/A'}
 Diagnosis: ${existingPatientData.diagnosis || 'N/A'}
@@ -140,13 +150,17 @@ ${commonDurationsContext}
 --- COMMON DURATIONS END ---
 
 Based on the NEW audio narration, update the patient's information. Provide the complete, updated information in a single, valid JSON object format with the following fields:
-1.  patientName (string, update if clearly stated as different)
+1.  patientName (string, update if clearly stated as different) - Listen for Urdu/Punjabi names
 2.  age (string, update if clearly stated as different)
 3.  gender (string, update if clearly stated as different)
-4.  complaints (string, update with new information or merge intelligently. This should include current complaints AND relevant patient-reported history from the new audio.)
-5.  examination (string, update with new findings)
-6.  diagnosis (string, update with new diagnosis)
-7.  medications (array of objects, where each object MUST have "name", "instructions", and "duration" fields). Update this list based on the new audio. If new medications are added, include them. If existing medications are explicitly changed (e.g., dosage, duration) or stopped, reflect that. If medications are not discussed, you may carry over the existing ones if appropriate, or the doctor might state to continue them.
+4.  contactNo (string, update if provided)
+5.  nicNo (string, update if provided)
+6.  occupation (string, update if provided)
+7.  address (string, update if provided) - May be in Urdu/Punjabi
+8.  complaints (string, update with new information or merge intelligently. This should include current complaints AND relevant patient-reported history from the new audio.)
+9.  examination (string, update with new findings)
+10. diagnosis (string, update with new diagnosis)
+11. medications (array of objects, where each object MUST have "name", "instructions", and "duration" fields). Update this list based on the new audio. If new medications are added, include them. If existing medications are explicitly changed (e.g., dosage, duration) or stopped, reflect that. If medications are not discussed, you may carry over the existing ones if appropriate, or the doctor might state to continue them.
 
 Prioritize the doctor's exact narrated details for each specific medication in the new audio.
 If instructions or duration for a medication (new or existing being modified) are unclear or not provided in the new narration, set them to "N/A".
@@ -155,9 +169,13 @@ Ensure the entire output is ONLY the JSON object. Do not include any explanatory
 
 Example JSON output structure (this is the FULL structure to return, updated):
 {
-  "patientName": "Updated Name if any",
+  "patientName": "محمد علی احمد",
   "age": "Updated Age if any",
   "gender": "Updated Gender if any",
+  "contactNo": "03001234567",
+  "nicNo": "3520298765432",
+  "occupation": "Businessman",
+  "address": "House 45, Block C, Johar Town, Lahore",
   "complaints": "Updated or merged complaints",
   "examination": "Updated examination findings",
   "diagnosis": "Updated diagnosis",
@@ -171,7 +189,13 @@ Example JSON output structure (this is the FULL structure to return, updated):
                     // Original prompt for new data extraction
                     prompt = `
 You are an expert medical assistant. Listen to the following audio of a doctor's narration for a patient report.
-The doctor will mention patient details, complaints, examination findings, diagnosis, and medications (including their specific instructions and durations).
+The doctor will speak in a mix of Urdu/Punjabi (for patient demographics) and English (for medical terms).
+
+IMPORTANT LANGUAGE CONTEXT:
+- Patient names will often be in Urdu/Punjabi (e.g., محمد علی، فاطمہ بی بی، راشد احمد)
+- Common Urdu/Punjabi name patterns: Mohammad/Muhammad, Ali, Ahmed/Ahmad, Rashid, Fatima, Ayesha, Khadija, Bibi, Begum
+- Addresses may include areas like: Gulberg, Johar Town, Model Town, Shadman, DHA, Cantt, etc.
+- The doctor may speak patient details in Urdu/Punjabi and medical terms in English
 
 Here is a list of known medication names that might be mentioned:
 --- KNOWN MEDICATION NAMES START ---
@@ -189,25 +213,35 @@ ${commonDurationsContext}
 --- COMMON DURATIONS END ---
 
 Extract the following information and provide it in a single, valid JSON object format:
-1.  patientName (string)
+1.  patientName (string) - Listen carefully for Urdu/Punjabi names
 2.  age (string)
-3.  gender (string)
-4.  complaints (string, a summary. This should include current complaints AND relevant patient-reported history, for example, phrases like "No history of..." or "Past history of...")
-5.  examination (string, a summary of the physical examination findings by the doctor)
-6.  diagnosis (string, a summary)
-7.  medications (array of objects, where each object MUST have "name", "instructions", and "duration" fields).
+3.  gender (string) - Male/Female, or مرد/عورت in Urdu
+4.  contactNo (string) - Phone number, may start with 03 for Pakistani mobile numbers
+5.  nicNo (string) - National ID card number (13 digits for Pakistan)
+6.  occupation (string) - Patient's occupation/profession
+7.  address (string) - Complete address, may be in Urdu/Punjabi
+8.  complaints (string, a summary. This should include current complaints AND relevant patient-reported history, for example, phrases like "No history of..." or "Past history of...")
+9.  examination (string, a summary of the physical examination findings by the doctor)
+10. diagnosis (string, a summary)
+11. medications (array of objects, where each object MUST have "name", "instructions", and "duration" fields).
     - For each medication mentioned in the audio, accurately capture its name, the specific instructions given, and the specific duration given.
     - Use the provided lists of known medication names, common instructions, and common durations to help improve accuracy of transcription and interpretation, but prioritize the doctor's exact narrated details for each specific medication.
     - If a medication name mentioned is not in the known list, transcribe it as heard.
     - If instructions or duration for a specific medication are unclear or not provided in the narration, set them to "N/A".
 
+For any field not mentioned in the audio, set it to an empty string "".
+
 Ensure the entire output is ONLY the JSON object. Do not include any explanatory text, markdown formatting (like \`\`\`json), or anything else before or after the JSON.
 
 Example JSON output structure:
 {
-  "patientName": "Mrs Rana Shahid",
+  "patientName": "محمد رشید احمد",
   "age": "38 years",
-  "gender": "Female",
+  "gender": "Male",
+  "contactNo": "03214567890",
+  "nicNo": "3520212345678",
+  "occupation": "Teacher",
+  "address": "House 25, Street 10, Gulberg III, Lahore",
   "complaints": "Headache, Neck pain, Disturbed sleep x 3 days",
   "examination": "No Neurological Deficit B.P 130/85",
   "diagnosis": "TH, HTN",
